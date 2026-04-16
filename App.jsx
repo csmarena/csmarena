@@ -8,6 +8,7 @@ import {
   query,
   where,
   setDoc,
+  getDoc,
 } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import "./App.css";
@@ -251,6 +252,22 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+  const carregarPix = async () => {
+    const docRef = doc(db, "config", "pix");
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      setPixKey(data.pixKey || "");
+      setAccountName(data.accountName || "");
+      setBank(data.bank || "");
+    }
+  };
+
+  carregarPix();
+}, []);
+  
+  useEffect(() => {
     const q = query(collection(db, "config"), where("type", "==", "logo"));
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -272,22 +289,6 @@ export default function App() {
       localStorage.setItem("logo", logo);
     }
   }, [logo]);
-
-  useEffect(() => {
-    localStorage.setItem("pixKey", pixKey);
-  }, [pixKey]);
-  useEffect(() => {
-    localStorage.setItem("accountName", accountName);
-  }, [accountName]);
-
-  useEffect(() => {
-    localStorage.setItem("bank", bank);
-  }, [bank]);
-
-  // ❌ DESATIVADO PARA EVITAR CONFLITO COM FIREBASE
-  // useEffect(() => {
-  //   localStorage.setItem("reservations", JSON.stringify(reservations));
-  // }, [reservations]);
 
   useEffect(() => {
     const interval = setInterval(async () => {
