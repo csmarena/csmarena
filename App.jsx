@@ -580,7 +580,16 @@ export default function App() {
   if (page === "admin") {
     if (adminPage === "menu") {
       return (
-        <div className="container">
+        <div
+  className="container"
+  style={{
+    width: "100%",
+    maxWidth: "500px",
+    margin: "0 auto",
+    padding: "10px",
+    overflow: "hidden",
+  }}
+>
           <Back />
           <h2>ADMINISTRAÇÃO</h2>
           <button
@@ -822,7 +831,16 @@ export default function App() {
       });
 
       return (
-        <div className="container">
+        <div
+  className="container"
+  style={{
+    width: "100%",
+    maxWidth: "500px",
+    margin: "0 auto",
+    padding: "10px",
+    overflow: "hidden",
+  }}
+>
           <Back />
           <h2>CLIENTES</h2>
 
@@ -1099,7 +1117,16 @@ export default function App() {
   }
   if (adminPage === "addClient") {
     return (
-      <div className="container">
+      <div
+  className="container"
+  style={{
+    width: "100%",
+    maxWidth: "500px",
+    margin: "0 auto",
+    padding: "10px",
+    overflow: "hidden",
+  }}
+>
         <Back />
         <h2>NOVO CLIENTE</h2>
         <input
@@ -1168,7 +1195,16 @@ export default function App() {
 
   if (adminPage === "payment") {
     return (
-      <div className="container">
+      <div
+  className="container"
+  style={{
+    width: "100%",
+    maxWidth: "500px",
+    margin: "0 auto",
+    padding: "10px",
+    overflow: "hidden",
+  }}
+>
         <Back />
 
         <h2>PAGAMENTO (PIX)</h2>
@@ -1224,7 +1260,16 @@ export default function App() {
   }
   if (adminPage === "trash") {
     return (
-      <div className="container">
+      <div
+  className="container"
+  style={{
+    width: "100%",
+    maxWidth: "500px",
+    margin: "0 auto",
+    padding: "10px",
+    overflow: "hidden",
+  }}
+>
         <Back />
         <h2>LIXEIRA</h2>
 
@@ -1361,7 +1406,16 @@ export default function App() {
   // ================= HOME =================
   if (page === "home") {
     return (
-      <div className="container">
+      <div
+  className="container"
+  style={{
+    width: "100%",
+    maxWidth: "500px",
+    margin: "0 auto",
+    padding: "10px",
+    overflow: "hidden",
+  }}
+>
         <input
           type="file"
           accept="image/*"
@@ -1512,7 +1566,16 @@ export default function App() {
 
   if (page === "cadastro") {
     return (
-      <div className="container">
+      <div
+  className="container"
+  style={{
+    width: "100%",
+    maxWidth: "500px",
+    margin: "0 auto",
+    padding: "10px",
+    overflow: "hidden",
+  }}
+>
         <Back />
         <h2>SEU CADASTRO</h2>
 
@@ -1659,7 +1722,16 @@ export default function App() {
 
   if (page === "booking") {
     return (
-      <div className="container">
+      <div
+  className="container"
+  style={{
+    width: "100%",
+    maxWidth: "500px",
+    margin: "0 auto",
+    padding: "10px",
+    overflow: "hidden",
+  }}
+>
         <Back />
 
         {step === 1 && (
@@ -1978,7 +2050,16 @@ export default function App() {
     const paymentValue = isNight ? "R$ 10,00" : "R$ 5,00";
 
     return (
-      <div className="container">
+      <div
+  className="container"
+  style={{
+    width: "100%",
+    maxWidth: "500px",
+    margin: "0 auto",
+    padding: "10px",
+    overflow: "hidden",
+  }}
+>
         <button
           className="back"
           onClick={() => {
@@ -2129,7 +2210,16 @@ export default function App() {
   }
   if (page === "success") {
   return (
-    <div className="container">
+    <div
+  className="container"
+  style={{
+    width: "100%",
+    maxWidth: "500px",
+    margin: "0 auto",
+    padding: "10px",
+    overflow: "hidden",
+  }}
+>
       <h2 style={{ color: "black" }}>✅ Reserva confirmada com sucesso!</h2>
       <Button text="Voltar ao início" onClick={() => setPage("home")} />
     </div>
