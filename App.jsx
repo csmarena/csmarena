@@ -2218,18 +2218,10 @@ export default function App() {
         maxWidth: "500px",
         margin: "0 auto",
         padding: "10px",
-        height: "100vh", // 🔥 ocupa tela inteira
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center", // 🔥 centraliza vertical
-        alignItems: "center", // 🔥 centraliza horizontal
-        textAlign: "center",
+        overflow: "hidden",
       }}
     >
-      <h2 style={{ color: "black", marginBottom: "20px" }}>
-        ✅ Reserva confirmada com sucesso!
-      </h2>
-
+      <h2 style={{ color: "black" }}>✅ Reserva confirmada com sucesso!</h2>
       <Button text="Voltar ao início" onClick={() => setPage("home")} />
     </div>
   );
