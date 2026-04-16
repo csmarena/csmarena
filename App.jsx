@@ -542,7 +542,7 @@ export default function App() {
     if (page === "payment") {
       const unlock = setTimeout(() => {
         setConfirmEnabled(true);
-      }, 60000); // 1 minuto
+      }, 45000); // 45 segundos
 
       return () => clearTimeout(unlock);
     }
