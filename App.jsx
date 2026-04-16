@@ -2209,20 +2209,21 @@ export default function App() {
       </div>
     );
   }
- if (page === "success") {
+  if (page === "success") {
   return (
     <div
-      className="container"
-      style={{
-        width: "100%",
-        maxWidth: "500px",
-        margin: "0 auto",
-        padding: "10px",
-        overflow: "hidden",
-      }}
-    >
+  className="container"
+  style={{
+    width: "100%",
+    maxWidth: "500px",
+    margin: "0 auto",
+    padding: "10px",
+    overflow: "hidden",
+  }}
+>
       <h2 style={{ color: "black" }}>✅ Reserva confirmada com sucesso!</h2>
       <Button text="Voltar ao início" onClick={() => setPage("home")} />
     </div>
   );
+}
 }
