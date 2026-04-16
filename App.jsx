@@ -65,6 +65,8 @@ const safeArray = (arr) => (Array.isArray(arr) ? arr : []);
 export default function App() {
   // ✅ STATES PRIMEIRO (OBRIGATÓRIO)
 
+  const savedTempId = localStorage.getItem("tempId");
+  
   const [selectedClient, setSelectedClient] = useState(null);
 
   const [calendarDate, setCalendarDate] = useState("");
@@ -116,6 +118,17 @@ export default function App() {
 
   // ✅ AGORA SIM os useEffect
 
+  useEffect(() => {
+  const savedId = localStorage.getItem("tempId");
+
+  if (savedId && !booking.tempId) {
+    setBooking((prev) => ({
+      ...prev,
+      tempId: savedId,
+    }));
+  }
+}, []);
+  
   useEffect(() => {
     localStorage.setItem("booking", JSON.stringify(booking));
   }, [booking]);
@@ -2035,7 +2048,9 @@ export default function App() {
 
   if (page === "payment") {
 
-    const reservaAtual = reservations.find(r => r.id === booking.tempId);
+    const reservaAtual = reservations.find(
+  r => r.id === (booking.tempId || savedTempId)
+);
 
 const remaining = reservaAtual?.expiresAt
   ? Math.max(0, Math.floor((reservaAtual.expiresAt - Date.now()) / 1000))
@@ -2194,6 +2209,7 @@ const seconds = remaining % 60;
 
               setBooking({ sport: "", date: "", hours: [] });
               setPage("success");
+              localStorage.removeItem("tempId");
             } catch (error) {
               console.error("Erro ao salvar:", error);
               alert("Erro ao salvar reserva");
