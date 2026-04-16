@@ -1659,24 +1659,25 @@ export default function App() {
             <h3 style={{ marginBottom: "10px" }}>DADOS DO JOGADOR</h3>
 
             <button
-              onClick={() => {
-                if (isAdmin) setShowClients(!showClients);
-              }}
-              style={{
-                width: "100%",
-                padding: "12px",
-                borderRadius: "10px",
-                border: "1px solid #ccc",
-                background: "#fff",
-                marginBottom: "10px",
-                cursor: isAdmin ? "pointer" : "default",
-                textAlign: "left",
-              }}
-            >
-              {activeClient.name
-                ? `${activeClient.name} (${activeClient.phone})`
-                : "Nome do Jogador"}
-            </button>
+  onClick={() => {
+    if (isAdmin) setShowClients(!showClients);
+  }}
+  style={{
+    width: "100%",
+    padding: "12px",
+    borderRadius: "10px",
+    border: "1px solid #ccc",
+    background: "#fff",
+    color: "#000", // 👈 AQUI ESTÁ A CORREÇÃO
+    marginBottom: "10px",
+    cursor: isAdmin ? "pointer" : "default",
+    textAlign: "left",
+  }}
+>
+  {activeClient.name
+    ? `${activeClient.name} (${activeClient.phone})`
+    : "Nome do Jogador"}
+</button>
 
             {isAdmin && showClients && (
               <div
@@ -2111,11 +2112,11 @@ export default function App() {
     );
   }
   if (page === "success") {
-    return (
-      <div className="container">
-        <h2>✅ RESERVA REALIZADA!</h2>
-        <Button text="Voltar ao início" onClick={() => setPage("home")} />
-      </div>
-    );
-  }
+  return (
+    <div className="container">
+      <h2 style={{ color: "black" }}>✅ RESERVA REALIZADA!</h2>
+      <Button text="Voltar ao início" onClick={() => setPage("home")} />
+    </div>
+  );
+}
 }
