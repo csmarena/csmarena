@@ -2209,7 +2209,7 @@ export default function App() {
       </div>
     );
   }
-  if (page === "success") {
+ if (page === "success") {
   return (
     <div
       className="container"
@@ -2229,9 +2229,6 @@ export default function App() {
       <h2 style={{ color: "black", marginBottom: "20px" }}>
         ✅ Reserva confirmada com sucesso!
       </h2>
-      <h3 style={{ color: "blue", marginBottom: "20px" }}>
-        Nos vemos no jogo!🔥
-      </h3>
 
       <Button text="Voltar ao início" onClick={() => setPage("home")} />
     </div>
