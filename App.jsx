@@ -357,7 +357,7 @@ export default function App() {
     let endCount = 0;
 
     for (let r of reservations) {
-      const invalidStatus = ["cancelada", "expirada"];
+      const invalidStatus = ["cancelada", "expirada", "pendente"];
 
       if (
         r.date !== booking.date ||
