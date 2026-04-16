@@ -2009,9 +2009,7 @@ export default function App() {
               </p>
             </div>
 
-            <p style={{ marginTop: "20px", fontWeight: "bold" }}>
-              Te aguardamos na Arena! 💪🔥
-            </p>
+        
 
             <Button
               text="Confirmar"
@@ -2229,6 +2227,10 @@ export default function App() {
       <h2 style={{ color: "black", marginBottom: "20px" }}>
         ✅ Reserva confirmada com sucesso!
       </h2>
+      
+      <p style={{ marginTop: "20px", fontWeight: "bold" }}>
+              Te aguardamos na Arena! 💪🔥
+            </p>
 
       <Button text="Voltar ao início" onClick={() => setPage("home")} />
     </div>
