@@ -2114,7 +2114,7 @@ export default function App() {
   if (page === "success") {
   return (
     <div className="container">
-      <h2 style={{ color: "black" }}>✅ RESERVA REALIZADA!</h2>
+      <h2 style={{ color: "black" }}>✅ Reserva confirmada com sucesso!</h2>
       <Button text="Voltar ao início" onClick={() => setPage("home")} />
     </div>
   );
