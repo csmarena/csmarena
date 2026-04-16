@@ -235,9 +235,6 @@ export default function App() {
     const savedUser = localStorage.getItem("user");
     const savedLogo = localStorage.getItem("logo");
     const savedClients = localStorage.getItem("clients"); // ✅ AQUI
-    const savedPix = localStorage.getItem("pixKey");
-    const savedAccountName = localStorage.getItem("accountName");
-    const savedBank = localStorage.getItem("bank");
 
     if (savedUser) {
       const parsedUser = JSON.parse(savedUser);
@@ -246,9 +243,6 @@ export default function App() {
     }
 
     if (savedLogo) setLogo(savedLogo);
-    if (savedPix) setPixKey(savedPix);
-    if (savedAccountName) setAccountName(savedAccountName);
-    if (savedBank) setBank(savedBank);
   }, []);
 
   useEffect(() => {
