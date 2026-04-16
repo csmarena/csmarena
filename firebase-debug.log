@@ -1,0 +1,176 @@
+[debug] [2026-04-10T03:40:23.868Z] ----------------------------------------------------------------------
+[debug] [2026-04-10T03:40:23.870Z] Command:       /nix/store/9cyx2v23dip6p9q98384k9v06c96qskb-nodejs-24.13.0/bin/node /home/runner/workspace/.config/npm/node_global/bin/firebase init
+[debug] [2026-04-10T03:40:23.871Z] CLI Version:   15.14.0
+[debug] [2026-04-10T03:40:23.871Z] Platform:      linux
+[debug] [2026-04-10T03:40:23.871Z] Node Version:  v24.13.0
+[debug] [2026-04-10T03:40:23.871Z] Time:          Fri Apr 10 2026 03:40:23 GMT+0000 (Coordinated Universal Time)
+[debug] [2026-04-10T03:40:23.871Z] ----------------------------------------------------------------------
+[debug] 
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /home/runner/workspace
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] 
+[debug] [2026-04-10T03:49:52.740Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-04-10T03:49:52.740Z] > authorizing via signed-in user (csm.arena.esportes@gmail.com)
+[debug] [2026-04-10T03:49:52.741Z] Checked if tokens are valid: true, expires at: 1775795912110
+[debug] [2026-04-10T03:49:52.741Z] Checked if tokens are valid: true, expires at: 1775795912110
+[debug] [2026-04-10T03:49:52.742Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=100
+[debug] [2026-04-10T03:49:53.103Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2026-04-10T03:49:53.103Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[info] 
+=== Hosting Setup
+[debug] [2026-04-10T03:50:23.406Z] Error: Cannot find module 'vite'
+Require stack:
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/frameworks/utils.js
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/frameworks/index.js
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/init/features/hosting/index.js
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/init/features/index.js
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/init/index.js
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/commands/init.js
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/commands/index.js
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/index.js
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/bin/cli.js
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/bin/firebase.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1421:15)
+    at require.resolve (node:internal/modules/helpers:163:19)
+    at relativeRequire (/home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/frameworks/utils.js:210:34)
+    at getConfig (/home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/frameworks/vite/index.js:112:65)
+    at discover (/home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/frameworks/vite/index.js:65:68)
+    at async /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/frameworks/vite/index.js:44:55
+    at async discover (/home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/frameworks/index.js:50:32)
+    at async Object.askQuestions (/home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/init/features/hosting/index.js:23:33)
+    at async init (/home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/init/index.js:102:17)
+    at async Command.initAction [as actionFn] (/home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/commands/init.js:232:5)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2026-04-10T04:15:02.317Z] ----------------------------------------------------------------------
+[debug] [2026-04-10T04:15:02.320Z] Command:       /nix/store/9cyx2v23dip6p9q98384k9v06c96qskb-nodejs-24.13.0/bin/node /home/runner/workspace/.config/npm/node_global/bin/firebase init
+[debug] [2026-04-10T04:15:02.320Z] CLI Version:   15.14.0
+[debug] [2026-04-10T04:15:02.320Z] Platform:      linux
+[debug] [2026-04-10T04:15:02.320Z] Node Version:  v24.13.0
+[debug] [2026-04-10T04:15:02.320Z] Time:          Fri Apr 10 2026 04:15:02 GMT+0000 (Coordinated Universal Time)
+[debug] [2026-04-10T04:15:02.320Z] ----------------------------------------------------------------------
+[debug] 
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /home/runner/workspace
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] 
+[debug] [2026-04-10T04:15:18.109Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-04-10T04:15:18.109Z] > authorizing via signed-in user (csm.arena.esportes@gmail.com)
+[debug] [2026-04-10T04:15:18.110Z] Checked if tokens are valid: true, expires at: 1775795912110
+[debug] [2026-04-10T04:15:18.111Z] Checked if tokens are valid: true, expires at: 1775795912110
+[debug] [2026-04-10T04:15:18.112Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/csm-arena [none]
+[debug] [2026-04-10T04:15:18.332Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/csm-arena 200
+[debug] [2026-04-10T04:15:18.332Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/csm-arena {"projectId":"csm-arena","projectNumber":"288274431272","displayName":"CSM-ARENA","name":"projects/csm-arena","resources":{"hostingSite":"csm-arena"},"state":"ACTIVE","etag":"1_7a6e091f-bd93-428e-8846-c5caf2637bcd"}
+[info] i  Using project csm-arena (CSM-ARENA) . 
+[info] 
+=== Hosting Setup
+[debug] [2026-04-10T04:15:25.925Z] Error: Cannot find module 'vite'
+Require stack:
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/frameworks/utils.js
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/frameworks/index.js
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/init/features/hosting/index.js
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/init/features/index.js
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/init/index.js
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/commands/init.js
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/commands/index.js
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/index.js
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/bin/cli.js
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/bin/firebase.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1421:15)
+    at require.resolve (node:internal/modules/helpers:163:19)
+    at relativeRequire (/home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/frameworks/utils.js:210:34)
+    at getConfig (/home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/frameworks/vite/index.js:112:65)
+    at discover (/home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/frameworks/vite/index.js:65:68)
+    at async /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/frameworks/vite/index.js:44:55
+    at async discover (/home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/frameworks/index.js:50:32)
+    at async Object.askQuestions (/home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/init/features/hosting/index.js:23:33)
+    at async init (/home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/init/index.js:102:17)
+    at async Command.initAction [as actionFn] (/home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/commands/init.js:232:5)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2026-04-10T04:15:53.154Z] ----------------------------------------------------------------------
+[debug] [2026-04-10T04:15:53.156Z] Command:       /nix/store/9cyx2v23dip6p9q98384k9v06c96qskb-nodejs-24.13.0/bin/node /home/runner/workspace/.config/npm/node_global/bin/firebase init
+[debug] [2026-04-10T04:15:53.156Z] CLI Version:   15.14.0
+[debug] [2026-04-10T04:15:53.156Z] Platform:      linux
+[debug] [2026-04-10T04:15:53.156Z] Node Version:  v24.13.0
+[debug] [2026-04-10T04:15:53.156Z] Time:          Fri Apr 10 2026 04:15:53 GMT+0000 (Coordinated Universal Time)
+[debug] [2026-04-10T04:15:53.156Z] ----------------------------------------------------------------------
+[debug] 
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /home/runner/workspace
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] 
+[debug] [2026-04-10T04:16:04.787Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-04-10T04:16:04.787Z] > authorizing via signed-in user (csm.arena.esportes@gmail.com)
+[debug] [2026-04-10T04:16:04.788Z] Checked if tokens are valid: true, expires at: 1775795912110
+[debug] [2026-04-10T04:16:04.788Z] Checked if tokens are valid: true, expires at: 1775795912110
+[debug] [2026-04-10T04:16:04.789Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/csm-arena [none]
+[debug] [2026-04-10T04:16:05.007Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/csm-arena 200
+[debug] [2026-04-10T04:16:05.007Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/csm-arena {"projectId":"csm-arena","projectNumber":"288274431272","displayName":"CSM-ARENA","name":"projects/csm-arena","resources":{"hostingSite":"csm-arena"},"state":"ACTIVE","etag":"1_7a6e091f-bd93-428e-8846-c5caf2637bcd"}
+[info] i  Using project csm-arena (CSM-ARENA) . 
+[info] 
+=== Hosting Setup
+[debug] [2026-04-10T04:16:12.222Z] Error: Cannot find module 'vite'
+Require stack:
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/frameworks/utils.js
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/frameworks/index.js
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/init/features/hosting/index.js
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/init/features/index.js
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/init/index.js
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/commands/init.js
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/commands/index.js
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/index.js
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/bin/cli.js
+- /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/bin/firebase.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1421:15)
+    at require.resolve (node:internal/modules/helpers:163:19)
+    at relativeRequire (/home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/frameworks/utils.js:210:34)
+    at getConfig (/home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/frameworks/vite/index.js:112:65)
+    at discover (/home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/frameworks/vite/index.js:65:68)
+    at async /home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/frameworks/vite/index.js:44:55
+    at async discover (/home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/frameworks/index.js:50:32)
+    at async Object.askQuestions (/home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/init/features/hosting/index.js:23:33)
+    at async init (/home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/init/index.js:102:17)
+    at async Command.initAction [as actionFn] (/home/runner/workspace/.config/npm/node_global/lib/node_modules/firebase-tools/lib/commands/init.js:232:5)
+[error] 
+[error] Error: An unexpected error has occurred.
