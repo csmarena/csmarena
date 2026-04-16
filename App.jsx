@@ -1905,6 +1905,7 @@ export default function App() {
                     ...prev,
                     tempId: docRef.id,
                   }));
+                  localStorage.setItem("tempId", docRef.id);
 
                   setStep(4);
                 } catch (error) {
