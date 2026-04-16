@@ -2212,18 +2212,28 @@ export default function App() {
   if (page === "success") {
   return (
     <div
-  className="container"
-  style={{
-    width: "100%",
-    maxWidth: "500px",
-    margin: "0 auto",
-    padding: "10px",
-    overflow: "hidden",
-  }}
->
-      <h2 style={{ color: "black" }}>✅ Reserva confirmada com sucesso!</h2>
+      className="container"
+      style={{
+        width: "100%",
+        maxWidth: "500px",
+        margin: "0 auto",
+        padding: "10px",
+        height: "100vh", // 🔥 ocupa tela inteira
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center", // 🔥 centraliza vertical
+        alignItems: "center", // 🔥 centraliza horizontal
+        textAlign: "center",
+      }}
+    >
+      <h2 style={{ color: "black", marginBottom: "20px" }}>
+        ✅ Reserva confirmada com sucesso!
+      </h2>
+      <h3 style={{ color: "blue", marginBottom: "20px" }}>
+        Nos vemos no jogo!🔥
+      </h3>
+
       <Button text="Voltar ao início" onClick={() => setPage("home")} />
     </div>
   );
-}
 }
