@@ -343,7 +343,7 @@ export default function App() {
 
   const [showClients, setShowClients] = useState(false);
 
-  const [paymentTime, setPaymentTime] = useState(300); // 5 minutos
+  const [paymentTime, setPaymentTime] = useState(500); // 5 minutos
   const [confirmEnabled, setConfirmEnabled] = useState(false);
   const hours = generateHours();
 
@@ -1906,7 +1906,7 @@ export default function App() {
                     name: booking.client?.name,
                     phone: cleanPhone(booking.client?.phone),
                     status: "pendente",
-                    expiresAt: Date.now() + 3 * 60 * 1000,
+                    expiresAt: Date.now() + 5 * 60 * 1000,
                     createdAt: Date.now(),
                   });
 
