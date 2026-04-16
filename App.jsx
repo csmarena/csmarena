@@ -1243,12 +1243,20 @@ export default function App() {
 
         <Button
           text="Salvar"
-          onClick={() => {
-            localStorage.setItem("pixKey", pixKey);
-            localStorage.setItem("accountName", accountName);
-            localStorage.setItem("bank", bank);
-            alert("Dados salvos com sucesso!");
-          }}
+          onClick={async () => {
+  try {
+    await setDoc(doc(db, "config", "pix"), {
+      pixKey,
+      accountName,
+      bank,
+    });
+
+    alert("Dados salvos com sucesso!");
+  } catch (error) {
+    console.error("Erro ao salvar PIX:", error);
+    alert("Erro ao salvar dados");
+  }
+}}
         />
       </div>
     );
@@ -2028,8 +2036,6 @@ export default function App() {
   }
 
   if (page === "payment") {
-    const accountName = localStorage.getItem("accountName") || "";
-    const bank = localStorage.getItem("bank") || "";
 
     const minutes = Math.floor(paymentTime / 60);
     const seconds = paymentTime % 60;
