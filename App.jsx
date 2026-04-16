@@ -527,16 +527,15 @@ export default function App() {
     </button>
   );
   useEffect(() => {
-    if (page !== "payment") return;
+  if (page !== "payment") return;
 
-    if (paymentTime <= 0) return;
+  const timer = setInterval(() => {
+    // só força re-render
+    setPaymentTime((prev) => prev + 1);
+  }, 1000);
 
-    const timer = setInterval(() => {
-      setPaymentTime((prev) => prev - 1);
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [page, paymentTime]);
+  return () => clearInterval(timer);
+}, [page]);
 
   useEffect(() => {
     if (page === "payment") {
@@ -2035,8 +2034,14 @@ export default function App() {
 
   if (page === "payment") {
 
-    const minutes = Math.floor(paymentTime / 60);
-    const seconds = paymentTime % 60;
+    const reservaAtual = reservations.find(r => r.id === booking.tempId);
+
+const remaining = reservaAtual?.expiresAt
+  ? Math.max(0, Math.floor((reservaAtual.expiresAt - Date.now()) / 1000))
+  : 0;
+
+const minutes = Math.floor(remaining / 60);
+const seconds = remaining % 60;
 
     const sorted = [
       ...(Array.isArray(booking.hours) ? booking.hours : []),
