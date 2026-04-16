@@ -618,7 +618,15 @@ export default function App() {
 
     if (adminPage === "calendar") {
       return (
-        <div className="container">
+        <div
+  className="container"
+  style={{
+    maxWidth: "500px",
+    width: "100%",
+    margin: "0 auto",
+    padding: "10px",
+  }}
+>
           <Back />
           <h2>CALENDÁRIO</h2>
 
@@ -658,7 +666,15 @@ export default function App() {
 
     if (adminPage === "list") {
       return (
-        <div className="container">
+        <div
+  className="container"
+  style={{
+    maxWidth: "500px",
+    width: "100%",
+    margin: "0 auto",
+    padding: "10px",
+  }}
+>
           <Back />
           <h2>AGENDAMENTOS</h2>
 
