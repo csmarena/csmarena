@@ -187,3 +187,6 @@ html, body, #root {
 * {
   box-sizing: border-box;
 }
+.titulo {
+  color: black;
+}
