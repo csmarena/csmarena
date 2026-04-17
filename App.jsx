@@ -662,13 +662,6 @@ useEffect(() => {
           <Button text="📋 AGENDAMENTOS" onClick={() => setAdminPage("list")} />
           <Button text="👥 JOGADORES" onClick={() => setAdminPage("clients")} />
           <Button text="💰 PAGAMENTO" onClick={() => setAdminPage("payment")} />
-          <Button
-            text="➕ NOVA RESERVA"
-            onClick={() => {
-              setPage("booking");
-              setStep(2);
-            }}
-          />
         </div>
       );
     }
@@ -735,6 +728,14 @@ useEffect(() => {
           <Back />
           <h2 className="titulo">AGENDAMENTOS</h2>
 
+          <Button
+            text="➕ NOVA RESERVA"
+            onClick={() => {
+              setPage("booking");
+              setStep(2);
+            }}
+          />
+          
           {sortedReservations
             .filter((r) => r.status !== "expirada")
             .map((r, i) => (
