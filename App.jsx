@@ -1258,6 +1258,7 @@ useEffect(() => {
 
         {/* DADOS DA CONTA */}
         <h3 style={{ marginTop: "20px" }}>DADOS DA CONTA:</h3>
+        <h2 className="titulo">DADOS DA CONTA</h2>
 
         {/* PIX */}
         <div className="card">
