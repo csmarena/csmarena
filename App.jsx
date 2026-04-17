@@ -28,12 +28,12 @@ const formatPhone = (phone) => {
 };
 
 const sports = [
-  "Vôlei",
-  "Futevôlei",
-  "Beach Tênis",
-  "Futmesa",
-  "Treino",
-  "Outro",
+  "🏐 Vôlei",
+  "⚽ Futevôlei",
+  "🏓 Beach Tênis",
+  "⚽ Futmesa",
+  "🏃🏻‍♀️ Treino",
+  "🏆 Outro",
 ];
 
 const generateHours = () => {
@@ -2097,14 +2097,7 @@ localStorage.setItem("booking_temp", JSON.stringify(finalBooking));
     (r) => r.id === (booking.tempId || savedTempId)
   );
 
-  // 🔒 proteção total contra tela preta
-  if (!reservaAtual) {
-    return (
-      <div className="container">
-        <p>Carregando pagamento...</p>
-      </div>
-    );
-  }
+ if (!reservaAtual) return null;
 
   const createdAt = reservaAtual.createdAt || Date.now();
 
