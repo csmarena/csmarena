@@ -408,7 +408,6 @@ useEffect(() => {
     if (!booking.date) return false;
     if (hour === "00:00") return false;
 
-    const now = new Date();
     const todayStr = new Date().toLocaleDateString("sv-SE");
 
     if (booking.date !== todayStr) return false;
@@ -1764,18 +1763,21 @@ const lastHour = sorted[sorted.length - 1];
 const [h1, m1] = firstHour.split(":").map(Number);
 const [h2, m2] = lastHour.split(":").map(Number);
 
-// 🔥 início
-const inicio = new Date(r.date);
+// 🔥 CORREÇÃO AQUI
+const [year, month, day] = r.date.split("-").map(Number);
+
+// 🔥 início (LOCAL, sem bug de UTC)
+const inicio = new Date(year, month - 1, day);
 if (h1 === 0) inicio.setDate(inicio.getDate() + 1);
 inicio.setHours(h1, m1, 0, 0);
 
-// 🔥 fim
-const fim = new Date(r.date);
+// 🔥 fim (LOCAL, sem bug)
+const fim = new Date(year, month - 1, day);
 if (h2 === 0) fim.setDate(fim.getDate() + 1);
 fim.setHours(h2, m2, 0, 0);
 fim.setMinutes(fim.getMinutes() + 30);
 
-// 🔥 cálculos corretos
+// 🔥 cálculos
 const isFinished = now > fim;
 const diffHoras = (inicio - now) / (1000 * 60 * 60);
 const podeCancelar = diffHoras > 2;
