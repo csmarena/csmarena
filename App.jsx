@@ -49,7 +49,7 @@ const generateHours = () => {
 const formatDateBR = (date) => {
   if (!date) return "-"; // 🔥 EVITA ERRO
 
-  const [y, m, d] = date?.split(":") || [];
+  const [y, m, d] = date?.split("-") || [];
   return `${d}/${m}/${y}`;
 };
 
