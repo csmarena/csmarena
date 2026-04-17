@@ -1782,55 +1782,44 @@ const podeCancelar = diffHoras > 2;
 
             return (
               <div key={i} className="card">
-                <p>
-                  <b>Cliente:</b> {r.name}
-                </p>
-                <p>
-                  <b>Esporte:</b> {r.sport}
-                </p>
-                <p>
-                  <b>Data:</b> {formatDateBR(r.date)}
-                </p>
-                <p>
-                  <b>Horário:</b>{" "}
-                  {(Array.isArray(r.hours) ? r.hours : []).join(", ")}
-                </p>
-                <p>
-                  <b>Duração:</b> {calcDuration(r.hours)}h
-                </p>
-                <p>
-                  <p><b>Valor:</b> {calcPrice(r.hours)}</p>
-
-{r.status === "cancelada" ? (
-  <p className="cancelada">Reserva cancelada</p>
-) : isFinished ? (
-  <p style={{ color: "green", fontWeight: "bold" }}>
-    Jogo concluído
+  <p><b>Cliente:</b> {r.name}</p>
+  <p><b>Esporte:</b> {r.sport}</p>
+  <p><b>Data:</b> {formatDateBR(r.date)}</p>
+  <p>
+    <b>Horário:</b>{" "}
+    {(Array.isArray(r.hours) ? r.hours : []).join(", ")}
   </p>
-) : podeCancelar ? (
-  <Button
-    text="Cancelar"
-    type="secondary"
-    onClick={async () => {
-      if (window.confirm("Tem certeza que deseja cancelar?")) {
-        try {
-          await updateDoc(doc(db, "reservas", r.id), {
-            status: "cancelada",
-          });
-        } catch (error) {
-          console.error("Erro ao cancelar:", error);
-                }
-              }
-            }}
-          />
-        ) : (
-          <p className="cancel-info">
-            O prazo para cancelar expirou. VEM PRA ARENA!
-          </p>
-        )}
-      </div>
-    );
-  })}
+  <p><b>Duração:</b> {calcDuration(r.hours)}h</p>
+  <p><b>Valor:</b> {calcPrice(r.hours)}</p>
+
+  {r.status === "cancelada" ? (
+    <p className="cancelada">Reserva cancelada</p>
+  ) : isFinished ? (
+    <p style={{ color: "green", fontWeight: "bold" }}>
+      Jogo concluído
+    </p>
+  ) : podeCancelar ? (
+    <Button
+      text="Cancelar"
+      type="secondary"
+      onClick={async () => {
+        if (window.confirm("Tem certeza que deseja cancelar?")) {
+          try {
+            await updateDoc(doc(db, "reservas", r.id), {
+              status: "cancelada",
+            });
+          } catch (error) {
+            console.error("Erro ao cancelar:", error);
+          }
+        }
+      }}
+    />
+  ) : (
+    <p className="cancel-info">
+      O prazo para cancelar expirou. VEM PRA ARENA!
+    </p>
+  )}
+</div>
 
 
   if (page === "booking") {
