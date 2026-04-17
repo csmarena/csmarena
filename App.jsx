@@ -266,24 +266,6 @@ useEffect(() => {
     return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const now = new Date();
-
-      setReservations((prev) =>
-        prev.filter((r) => {
-          if (r.status !== "pendente") return true;
-
-          const created = new Date(r.createdAt);
-          const diffMinutes = (now - created) / (1000 * 60);
-
-          return diffMinutes < 3;
-        }),
-      );
-    }, 10000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   useEffect(() => {
     if (!user || (!isAdmin && !user.phone)) return;
