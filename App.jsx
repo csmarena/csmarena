@@ -89,7 +89,7 @@ const isFinished = (r) => {
   data.setHours(h, m, 0, 0);
   data.setMinutes(data.getMinutes() + 30);
 
-  return now > data;
+return now > fim;
 };
 
 const podeCancelar = (r) => {
@@ -109,9 +109,9 @@ const podeCancelar = (r) => {
 
   data.setHours(h, m, 0, 0);
 
-  const diffHoras = (data - new Date()) / (1000 * 60 * 60);
+const diffHoras = (data - now) / (1000 * 60 * 60);
 
-  return diffHoras > 2;
+return diffHoras > 2;
 };
 
   
@@ -1372,8 +1372,15 @@ useEffect(() => {
 
   if (hours.length === 0) return null;
 
-  const firstHour = [...hours].sort()[0];
-  const lastHour = [...hours].sort().slice(-1)[0];
+const sorted = [...hours].sort((a, b) => {
+  const [hA, mA] = a.split(":").map(Number);
+  const [hB, mB] = b.split(":").map(Number);
+
+  return hA !== hB ? hA - hB : mA - mB;
+});
+
+const firstHour = sorted[0];
+const lastHour = sorted[sorted.length - 1];
 
   const [h1, m1] = firstHour.split(":").map(Number);
   const [h2, m2] = lastHour.split(":").map(Number);
@@ -1797,7 +1804,6 @@ if (h === 0) {
 
 data.setHours(h, m, 0, 0);
 
-const now = new Date();
 
 const diffHoras = (data - now) / (1000 * 60 * 60);
 
@@ -1823,36 +1829,35 @@ const podeCancelar = diffHoras > 2;
                   <b>Duração:</b> {calcDuration(r.hours)}h
                 </p>
                 <p>
-                  <b>Valor:</b> {calcPrice(r.hours)}
-                </p>
+                  <p><b>Valor:</b> {calcPrice(r.hours)}</p>
 
-                {r.status === "cancelada" ? (
-                  <p className="cancelada">Reserva cancelada</p>
+{r.status === "cancelada" ? (
+  <p className="cancelada">Reserva cancelada</p>
 ) : isFinished ? (
   <p style={{ color: "green", fontWeight: "bold" }}>
     Jogo concluído
   </p>
 ) : podeCancelar ? (
-                  <Button
-                    text="Cancelar"
-                    type="secondary"
-                    onClick={async () => {
-                      if (window.confirm("Tem certeza que deseja cancelar?")) {
-                        try {
-                          await updateDoc(doc(db, "reservas", r.id), {
-                            status: "cancelada",
-                          });
-                        } catch (error) {
-                          console.error("Erro ao cancelar:", error);
-                        }
-                      }
-                    }}
-                  />
-                ) : (
-                  <p className="cancel-info">
-                    O prazo para cancelar expirou. VEM PRA ARENA!
-                  </p>
-                )}
+  <Button
+    text="Cancelar"
+    type="secondary"
+    onClick={async () => {
+      if (window.confirm("Tem certeza que deseja cancelar?")) {
+        try {
+          await updateDoc(doc(db, "reservas", r.id), {
+            status: "cancelada",
+          });
+        } catch (error) {
+          console.error("Erro ao cancelar:", error);
+        }
+      }
+    }}
+  />
+) : (
+  <p className="cancel-info">
+    O prazo para cancelar expirou. VEM PRA ARENA!
+  </p>
+)}
               </div>
             );
           })}
