@@ -2195,23 +2195,24 @@ cursor: canConfirm ? "pointer" : "not-allowed",
             try {
               // 🔥 verifica conflito antes de confirmar
               const conflito = reservations.find((r) => {
-if (
-  r.id === booking.tempId ||
-  r.status === "cancelada" ||
-  r.status === "expirada"
-) {
-  return false;
-}
+  // ignora a própria reserva temporária e reservas não ativas
+  if (
+    r.id === booking.tempId ||
+    r.status !== "ativa"
+  ) {
+    return false;
+  }
 
-                if (r.date !== booking.date) return false;
+  // datas diferentes não conflitam
+  if (r.date !== booking.date) return false;
 
-                const hoursR = Array.isArray(r.hours) ? r.hours : [];
-                const hoursB = Array.isArray(booking.hours)
-                  ? booking.hours
-                  : [];
+  // garante arrays válidos
+  const hoursR = Array.isArray(r.hours) ? r.hours : [];
+  const hoursB = Array.isArray(booking.hours) ? booking.hours : [];
 
-                return hoursB.some((h) => hoursR.includes(h));
-              });
+  // verifica se algum horário bate
+  return hoursB.some((h) => hoursR.includes(h));
+});
 
               if (conflito) {
                 alert(
