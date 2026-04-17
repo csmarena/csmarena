@@ -62,13 +62,19 @@ const hourToNumber = (hour) => {
 
 const safeArray = (arr) => (Array.isArray(arr) ? arr : []);
 
+const getToday = () => {
+  return new Date().toISOString().split("T")[0];
+};
+
 export default function App() {
   // ✅ STATES PRIMEIRO (OBRIGATÓRIO)
 
   
   const [selectedClient, setSelectedClient] = useState(null);
 
-  const [calendarDate, setCalendarDate] = useState("");
+  const [calendarDate, setCalendarDate] = useState(() => {
+  return localStorage.getItem("calendarDate") || getToday();
+});
   const [logo, setLogo] = useState(null);
   const [pixKey, setPixKey] = useState("");
   const [accountName, setAccountName] = useState("");
@@ -322,6 +328,12 @@ useEffect(() => {
     }
   }, [logo]);
 
+  useEffect(() => {
+  if (calendarDate) {
+    localStorage.setItem("calendarDate", calendarDate);
+  }
+}, [calendarDate]);
+  
   useEffect(() => {
     const interval = setInterval(async () => {
       const expiradas = reservations.filter(
