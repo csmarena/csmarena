@@ -1790,7 +1790,9 @@ const podeCancelar = diffHoras > 2;
     {(Array.isArray(r.hours) ? r.hours : []).join(", ")}
   </p>
   <p><b>Duração:</b> {calcDuration(r.hours)}h</p>
-  <p><b>Valor:</b> {calcPrice(r.hours)}</p>
+  <p>
+  <b>Valor:</b> {calcPrice(r.hours)}
+</p>
 
   {r.status === "cancelada" ? (
     <p className="cancelada">Reserva cancelada</p>
@@ -1820,7 +1822,12 @@ const podeCancelar = diffHoras > 2;
     </p>
   )}
 </div>
+            );
+          })}   // 🔥 FECHA O MAP
 
+      </div>
+    );
+  }
 
   if (page === "booking") {
     return (
@@ -2131,12 +2138,12 @@ localStorage.setItem("booking_temp", JSON.stringify(finalBooking));
 
         
 
-            <Button
+                        <Button
               text="Página de Pagamento"
               onClick={() => {
                 if (!user.name || !user.phone) {
                   alert(
-                    "Por favor, complete seu cadastro antes de finalizar a reserva.",
+                    "Por favor, complete seu cadastro antes de finalizar a reserva."
                   );
                   setPage("cadastro");
                   return;
@@ -2151,8 +2158,9 @@ localStorage.setItem("booking_temp", JSON.stringify(finalBooking));
         )}
       </div>
     );
-  }
+  } // ✅ FECHA O if (page === "booking")
 
+  // 🔥 AGORA SIM pode começar outro if
   if (page === "payment") {
 
   const savedTempId = localStorage.getItem("tempId");
