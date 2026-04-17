@@ -1777,7 +1777,7 @@ useEffect(() => {
 
         {step === 1 && (
           <>
-            <h2>JÁ POSSUI CADASTRO?</h2>
+            <h2 className="titulo">JÁ POSSUI CADASTRO?</h2>
             <Button text="SIM" onClick={() => setStep(2)} />
             <Button text="NÃO" onClick={() => setPage("cadastro")} />
           </>
@@ -1867,7 +1867,7 @@ useEffect(() => {
               </div>
             )}
 
-            <h2 style={{ marginTop: "10px" }}>ESCOLHA O ESPORTE</h2>
+            <h2 className="titulo">ESCOLHA O ESPORTE</h2>
             {sports.map((s) => (
               <Button
                 key={s}
@@ -1895,7 +1895,7 @@ useEffect(() => {
 
         {step === 3 && (
           <>
-            <h2>ESCOLHA A DATA</h2>
+            <h2 className="titulo">ESCOLHA A DATA</h2>
 
             <input
   type="date"
@@ -1971,7 +1971,7 @@ setStep(4);
 
         {step === 4 && (
           <>
-            <h2>ESCOLHA O HORÁRIO</h2>
+            <h2 className="titulo">ESCOLHA O HORÁRIO</h2>
 
             <div className="grid">
               {hours.map((h) => {
@@ -2020,7 +2020,7 @@ localStorage.setItem("booking_temp", JSON.stringify(finalBooking));
 
         {step === 5 && (
           <>
-            <h2>RESUMO DA RESERVA</h2>
+            <h2 className="titulo">RESUMO DA RESERVA</h2>
 
             <div className="card">
               <p>
@@ -2068,7 +2068,7 @@ localStorage.setItem("booking_temp", JSON.stringify(finalBooking));
         
 
             <Button
-              text="Confirmar"
+              text="Página de Pagamento"
               onClick={() => {
                 if (!user.name || !user.phone) {
                   alert(
@@ -2151,7 +2151,7 @@ localStorage.setItem("booking_temp", JSON.stringify(finalBooking));
           ← Voltar
         </button>
 
-        <h2>PAGAMENTO</h2>
+        <h2 className="titulo">PAGAMENTO</h2>
 
         <p>Confirme sua reserva com o pagamento inicial!</p>
 
