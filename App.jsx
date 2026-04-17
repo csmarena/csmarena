@@ -404,21 +404,9 @@ useEffect(() => {
     return () => clearInterval(interval);
   }, [reservations]);
 
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      for (let r of reservations) {
-        if (r.status === "ativa" && isFinished(r)) {
-          try {
-            if (!r?.id) return;
-            await updateDoc(doc(db, "reservas", r.id), {
-              status: "concluída",
-            });
-          } catch (error) {
-            console.error("Erro ao concluir:", error);
-          }
-        }
-      }
-    }, 10000);
+useEffect(() => {
+  return () => {};
+}, []);
 
     return () => clearInterval(interval);
   }, [reservations]);
@@ -834,24 +822,24 @@ useEffect(() => {
                 <p>
   <b>Status:</b>{" "}
   <span
-    style={{
-      color: r.status === "cancelada"
-        ? "red"
-        : isFinished
-        ? "green"
-        : "black",
-      fontWeight: "bold",
-    }}
-  >
-    {r.status === "cancelada"
-      ? "cancelada"
+  style={{
+    color: r.status === "cancelada"
+      ? "red"
       : isFinished
-      ? "concluída"
-      : "ativa"}
-  </span>
+      ? "green"
+      : "black",
+    fontWeight: "bold",
+  }}
+>
+  {r.status === "cancelada"
+    ? "cancelada"
+    : isFinished
+    ? "concluída"
+    : "ativa"}
+</span>
 </p>
 
-{r.status !== "cancelada" && podeCancelar && (
+{!isFinished && r.status !== "cancelada" && podeCancelar && (
   <Button
     text="Cancelar"
     type="secondary"
