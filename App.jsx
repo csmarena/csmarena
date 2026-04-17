@@ -2042,10 +2042,10 @@ export default function App() {
   const savedTempId = localStorage.getItem("tempId");
 
   const reservaAtual = reservations.find(
-    r => r.id === (booking.tempId || savedTempId)
+    (r) => r.id === (booking.tempId || savedTempId)
   );
 
-  // 🔒 evita tela preta
+  // 🔒 proteção total contra tela preta
   if (!reservaAtual) {
     return (
       <div className="container">
@@ -2054,12 +2054,14 @@ export default function App() {
     );
   }
 
-  const createdAt = reservaAtual.createdAt || 0;
+  const createdAt = reservaAtual.createdAt || Date.now();
+
   const secondsPassed = Math.floor((Date.now() - createdAt) / 1000);
 
   // 🔓 libera após 45 segundos
   const canConfirm = secondsPassed >= 45;
 
+  // ⏱ tempo restante REAL (firebase)
   const remainingMs = reservaAtual.expiresAt - Date.now();
   const remaining = Math.max(0, Math.floor(remainingMs / 1000));
 
