@@ -2164,9 +2164,7 @@ localStorage.setItem("booking_temp", JSON.stringify(finalBooking));
             setStep(5);
           }}
         >
-          <p style={{ marginTop: "30px", fontWeight: "bold" }}>
-              ← Voltar
-            </p>
+          ← VOLTAR
         </button>
 
         <h2 className="titulo">PAGAMENTO</h2>
