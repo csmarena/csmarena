@@ -68,7 +68,8 @@ const getToday = () => {
 
 export default function App() {
   // ✅ STATES PRIMEIRO (OBRIGATÓRIO)
-
+  
+const [now, setNow] = useState(new Date());
   
 const isFinished = (r) => {
   const hours = Array.isArray(r.hours) ? r.hours : [];
@@ -88,7 +89,7 @@ const isFinished = (r) => {
   data.setHours(h, m, 0, 0);
   data.setMinutes(data.getMinutes() + 30);
 
-  return new Date() > data;
+  return now > data;
 };
 
 const podeCancelar = (r) => {
@@ -360,6 +361,14 @@ useEffect(() => {
     localStorage.setItem("calendarDate", calendarDate);
   }
 }, [calendarDate]);
+
+  useEffect(() => {
+  const interval = setInterval(() => {
+    setNow(new Date());
+  }, 60000); // 1 minuto
+
+  return () => clearInterval(interval);
+}, []);
   
   useEffect(() => {
     const interval = setInterval(async () => {
@@ -1379,7 +1388,7 @@ useEffect(() => {
   fim.setHours(h2, m2, 0, 0);
   fim.setMinutes(fim.getMinutes() + 30);
 
-  const now = new Date();
+  // usa o now do useState (global)
 
   const isFinished = now > fim;
   const diffHoras = (inicio - now) / (1000 * 60 * 60);
