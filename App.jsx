@@ -2178,7 +2178,6 @@ cursor: canConfirm ? "pointer" : "not-allowed",
           }}
           disabled={!canConfirm}
           onClick={async () => {
-            if (!confirmEnabled) return;
 
             try {
               // 🔥 verifica conflito antes de confirmar
