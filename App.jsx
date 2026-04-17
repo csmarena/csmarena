@@ -601,7 +601,7 @@ useEffect(() => {
     if (page === "booking" && step > 1) {
       return (
         <button className="back" onClick={() => setStep(step - 1)}>
-          ← Voltar
+          ⬅️ Voltar
         </button>
       );
     }
@@ -609,14 +609,14 @@ useEffect(() => {
     if (page === "admin" && adminPage !== "menu") {
       return (
         <button className="back" onClick={() => setAdminPage("menu")}>
-          ← Voltar
+          ⬅️ Voltar
         </button>
       );
     }
 
     return (
       <button className="back" onClick={() => setPage("home")}>
-        ← Voltar
+        ⬅️ Voltar
       </button>
     );
   };
@@ -2164,7 +2164,7 @@ localStorage.setItem("booking_temp", JSON.stringify(finalBooking));
             setStep(5);
           }}
         >
-          ← VOLTAR
+          ⬅️ Voltar
         </button>
 
         <h2 className="titulo">PAGAMENTO</h2>
