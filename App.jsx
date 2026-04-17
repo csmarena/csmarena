@@ -128,9 +128,14 @@ export default function App() {
   }
 }, []);
   
-  useEffect(() => {
-    localStorage.setItem("booking", JSON.stringify(booking));
-  }, [booking]);
+useEffect(() => {
+  const { sport, date } = booking;
+
+  localStorage.setItem(
+    "booking",
+    JSON.stringify({ sport, date, hours: [] }) // 🔥 NÃO salva horários
+  );
+}, [booking]);
 
   useEffect(() => {
     localStorage.setItem("page", page);
@@ -1872,10 +1877,16 @@ export default function App() {
             <h2>ESCOLHA A DATA</h2>
 
             <input
-              type="date"
-              min={new Date().toLocaleDateString("sv-SE")}
-              onChange={(e) => setBooking({ ...booking, date: e.target.value })}
-            />
+  type="date"
+  min={new Date().toLocaleDateString("sv-SE")}
+  onChange={(e) =>
+    setBooking({
+      ...booking,
+      date: e.target.value,
+      hours: [], // 🔥 LIMPA HORÁRIOS AO TROCAR DATA
+    })
+  }
+/>
 
             <Button
               text="Próximo"
@@ -1889,12 +1900,13 @@ export default function App() {
                   );
 
                   if (existing) {
-                    setBooking((prev) => ({
-                      ...prev,
-                      tempId: existing.id, // 🔥 GUARDA O ID
-                    }));
+  setBooking((prev) => ({
+    ...prev,
+    tempId: existing.id,
+    hours: [], // 🔥 LIMPA HORÁRIOS
+  }));
 
-                    setStep(4);
+  setStep(4);
                     return;
                   }
 
@@ -1915,9 +1927,10 @@ export default function App() {
 
                   // 🔥 GUARDA O ID
                   setBooking((prev) => ({
-                    ...prev,
-                    tempId: docRef.id,
-                  }));
+  ...prev,
+  tempId: docRef.id,
+  hours: [], // 🔥 LIMPA HORÁRIOS AQUI TAMBÉM
+}));
                   localStorage.setItem("tempId", docRef.id);
 
                   setStep(4);
