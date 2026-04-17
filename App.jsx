@@ -636,7 +636,7 @@ useEffect(() => {
   }}
 >
           <Back />
-          <h2>ADMINISTRAÇÃO</h2>
+          <h2 className="titulo">ADMINISTRAÇÃO</h2>
           <button
             onClick={() => setAdminPage("trash")}
             style={{
@@ -682,7 +682,7 @@ useEffect(() => {
   }}
 >
           <Back />
-          <h2>CALENDÁRIO</h2>
+          <h2 className="titulo">CALENDÁRIO</h2>
 
           <input
             type="date"
@@ -730,7 +730,7 @@ useEffect(() => {
   }}
 >
           <Back />
-          <h2>AGENDAMENTOS</h2>
+          <h2 className="titulo">AGENDAMENTOS</h2>
 
           {sortedReservations
             .filter((r) => r.status !== "expirada")
@@ -887,10 +887,10 @@ useEffect(() => {
   }}
 >
           <Back />
-          <h2>CLIENTES</h2>
+          <h2 className="titulo">JOGADORES</h2>
 
           <Button
-            text="➕ Adicionar Cliente"
+            text="➕ Adicionar Jogador"
             onClick={() => setAdminPage("addClient")}
           />
 
@@ -1324,7 +1324,7 @@ useEffect(() => {
   }}
 >
         <Back />
-        <h2>LIXEIRA</h2>
+        <h2 className="titulo">🗑️ LIXEIRA</h2>
 
         <Button
           text="🗑️ Esvaziar Lixeira"
@@ -1630,7 +1630,8 @@ useEffect(() => {
   }}
 >
         <Back />
-        <h2>SEU CADASTRO</h2>
+        <h2 className="titulo">CADASTRO DO JOGADOR</h2>
+      
 
         <input
           placeholder="Nome"
@@ -1663,6 +1664,10 @@ useEffect(() => {
           }}
         />
 
+        <p style={{ marginTop: "20px", fontWeight: "calibri" }}>
+              Reserve seus horários usando sempre estes dados.
+            </p>
+        
         <Button
           text="Salvar"
           onClick={async () => {
@@ -1702,7 +1707,7 @@ useEffect(() => {
           }}
         />
 
-        <h2>MINHAS RESERVAS</h2>
+        <h2 className="titulo">JOGOS AGENDADOS</h2>
 
         {sortedReservations
           .filter(
