@@ -1784,10 +1784,10 @@ useEffect(() => {
 
         {sortedReservations
           .filter(
-            (r) =>
-              r.status !== "expirada" &&
-              cleanPhone(r.phone) === cleanPhone(user.phone),
-          )
+  (r) =>
+    r.status === "ativa" &&
+    cleanPhone(r.phone) === cleanPhone(user.phone),
+)
           .map((r, i) => {
             const hours = Array.isArray(r.hours) ? r.hours : [];
 
