@@ -70,6 +70,51 @@ export default function App() {
   // ✅ STATES PRIMEIRO (OBRIGATÓRIO)
 
   
+const isFinished = (r) => {
+  const hours = Array.isArray(r.hours) ? r.hours : [];
+  if (hours.length === 0) return false;
+
+  const lastHour = hours[hours.length - 1];
+  if (!lastHour) return false;
+
+  const [h, m] = lastHour.split(":").map(Number);
+
+  const data = new Date(r.date);
+
+  if (h === 0) {
+    data.setDate(data.getDate() + 1);
+  }
+
+  data.setHours(h, m, 0, 0);
+  data.setMinutes(data.getMinutes() + 30);
+
+  return new Date() > data;
+};
+
+const podeCancelar = (r) => {
+  const hours = Array.isArray(r.hours) ? r.hours : [];
+  if (hours.length === 0) return false;
+
+  const firstHour = hours[0];
+  if (!firstHour) return false;
+
+  const [h, m] = firstHour.split(":").map(Number);
+
+  const data = new Date(r.date);
+
+  if (h === 0) {
+    data.setDate(data.getDate() + 1);
+  }
+
+  data.setHours(h, m, 0, 0);
+
+  const diffHoras = (data - new Date()) / (1000 * 60 * 60);
+
+  return diffHoras > 2;
+};
+
+  
+  
   const [selectedClient, setSelectedClient] = useState(null);
 
   const [calendarDate, setCalendarDate] = useState(() => {
@@ -498,29 +543,6 @@ useEffect(() => {
 
     return "";
   };
-  const isFinished = (r) => {
-  const hours = Array.isArray(r.hours) ? r.hours : [];
-
-  if (hours.length === 0) return false;
-
-  const lastHour = hours[hours.length - 1];
-  if (!lastHour) return false;
-
-  const [h, m] = lastHour.split(":").map(Number);
-
-  const data = new Date(r.date);
-
-  // 🔥 CORREÇÃO: meia-noite vai pro dia seguinte
-  if (h === 0) {
-    data.setDate(data.getDate() + 1);
-  }
-
-  data.setHours(h, m, 0, 0);
-
-  const now = new Date();
-
-  return now > data;
-};
 
   const sortedReservations = [...reservations].sort((a, b) => {
     const aHours = Array.isArray(a.hours) ? a.hours : [];
@@ -826,22 +848,23 @@ useEffect(() => {
                   </span>
                 </p>
                 {r.status !== "cancelada" && (
-                  <Button
-                    text="Cancelar"
-                    type="secondary"
-                    onClick={async () => {
-                      if (window.confirm("Cancelar reserva?")) {
-                        try {
-                          await updateDoc(doc(db, "reservas", r.id), {
-                            status: "cancelada",
-                          });
-                        } catch (error) {
-                          console.error("Erro ao cancelar:", error);
-                        }
-                      }
-                    }}
-                  />
-                )}
+                  {podeCancelar(r) && (
+  <Button
+    text="Cancelar"
+    type="secondary"
+    onClick={async () => {
+      if (window.confirm("Cancelar reserva?")) {
+        try {
+          await updateDoc(doc(db, "reservas", r.id), {
+            status: "cancelada",
+          });
+        } catch (error) {
+          console.error("Erro ao cancelar:", error);
+        }
+      }
+    }}
+  />
+)}
               </div>
             ))}
         </div>
