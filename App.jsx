@@ -65,7 +65,6 @@ const safeArray = (arr) => (Array.isArray(arr) ? arr : []);
 export default function App() {
   // ✅ STATES PRIMEIRO (OBRIGATÓRIO)
 
-  const savedTempId = localStorage.getItem("tempId");
   
   const [selectedClient, setSelectedClient] = useState(null);
 
