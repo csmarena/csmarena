@@ -761,7 +761,7 @@ useEffect(() => {
                     cursor: "pointer",
                   }}
                 >
-                  ✖
+                  ❌
                 </button>
                 <p>
                   <b>Cliente:</b> {r.name}
@@ -961,7 +961,7 @@ useEffect(() => {
                     cursor: "pointer",
                   }}
                 >
-                  ✖
+                  ❌
                 </button>
 
                 <button
