@@ -108,10 +108,31 @@ export default function App() {
   const [step, setStep] = useState(getSavedStep);
   const [adminPage, setAdminPage] = useState(getSavedAdminPage);
 
-  const getSavedBooking = () => {
-    const saved = localStorage.getItem("booking");
-    return saved ? JSON.parse(saved) : { sport: "", date: "", hours: [] };
-  };
+const getSavedBooking = () => {
+  try {
+    const saved = localStorage.getItem("booking_temp");
+
+    if (!saved) {
+      return {
+        sport: "",
+        date: "",
+        hours: [],
+        client: {},
+      };
+    }
+
+    return JSON.parse(saved);
+  } catch (error) {
+    console.error("Erro ao carregar booking:", error);
+
+    return {
+      sport: "",
+      date: "",
+      hours: [],
+      client: {},
+    };
+  }
+};
 
   const [booking, setBooking] = useState(getSavedBooking);
 
