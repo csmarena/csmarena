@@ -95,7 +95,7 @@ const podeCancelar = (r) => {
   const hours = Array.isArray(r.hours) ? r.hours : [];
   if (hours.length === 0) return false;
 
-  const firstHour = hours[0];
+  const firstHour = [...hours].sort()[0];
   if (!firstHour) return false;
 
   const [h, m] = firstHour.split(":").map(Number);
@@ -1751,11 +1751,26 @@ useEffect(() => {
               cleanPhone(r.phone) === cleanPhone(user.phone),
           )
           .map((r, i) => {
-            const reservaDateTime = new Date(
-              r.date + "T" + (r.hours?.[0] || "00:00"),
-            );
-            const now = new Date();
-            const diffHours = (reservaDateTime - now) / (1000 * 60 * 60);
+            const hours = Array.isArray(r.hours) ? r.hours : [];
+
+if (hours.length === 0) return null;
+
+// 🔥 usa o PRIMEIRO horário (início do jogo)
+const firstHour = hours[0];
+const [h, m] = firstHour.split(":").map(Number);
+
+const data = new Date(r.date);
+
+// 🔥 ajuste meia-noite
+if (h === 0) {
+  data.setDate(data.getDate() + 1);
+}
+
+data.setHours(h, m, 0, 0);
+
+const now = new Date();
+
+const diffHours = (data - now) / (1000 * 60 * 60);
 
             return (
               <div key={i} className="card">
@@ -1781,11 +1796,11 @@ useEffect(() => {
 
                 {r.status === "cancelada" ? (
                   <p className="cancelada">Reserva cancelada</p>
-                ) : r.status === "concluída" ? (
-                  <p style={{ color: "green", fontWeight: "bold" }}>
-                    Jogo concluído
-                  </p>
-                ) : diffHours >= 2 ? (
+                ) : now > data ? (
+  <p style={{ color: "green", fontWeight: "bold" }}>
+    Jogo concluído
+  </p>
+) : diffHours >= 2 ? (
                   <Button
                     text="Cancelar"
                     type="secondary"
