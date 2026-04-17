@@ -371,36 +371,31 @@ useEffect(() => {
 }, []);
   
   useEffect(() => {
-    const interval = setInterval(async () => {
-      const expiradas = reservations.filter(
-        (r) =>
-          r.status === "pendente" && r.expiresAt && Date.now() > r.expiresAt,
+  const interval = setInterval(async () => {
+    const expiradas = reservations.filter(
+      (r) =>
+        r.status === "pendente" &&
+        r.expiresAt &&
+        Date.now() > r.expiresAt
+    );
+
+    try {
+      await Promise.all(
+        expiradas
+          .filter((r) => r.id)
+          .map((r) =>
+            updateDoc(doc(db, "reservas", r.id), {
+              status: "expirada",
+            })
+          )
       );
+    } catch (error) {
+      console.error("Erro ao expirar:", error);
+    }
+  }, 5000);
 
-      try {
-        await Promise.all(
-          expiradas
-            .filter((r) => r.id)
-            .map((r) =>
-              updateDoc(doc(db, "reservas", r.id), {
-                status: "expirada",
-              }),
-            ),
-        );
-      } catch (error) {
-        console.error("Erro ao expirar:", error);
-      }
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [reservations]);
-
-useEffect(() => {
-  return () => {};
-}, []);
-
-    return () => clearInterval(interval);
-  }, [reservations]);
+  return () => clearInterval(interval);
+}, [reservations]);
 
   const [showClients, setShowClients] = useState(false);
 
