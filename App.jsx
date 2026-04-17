@@ -1370,7 +1370,12 @@ useEffect(() => {
 
   const hours = Array.isArray(r.hours) ? r.hours : [];
 
-  if (hours.length === 0) return null;
+  if (hours.length === 0) return (
+  <div key={i} className="card">
+    <p><b>Cliente:</b> {r.name}</p>
+    <p>Sem horários</p>
+  </div>
+);
 
 const sorted = [...hours].sort((a, b) => {
   const [hA, mA] = a.split(":").map(Number);
@@ -1791,23 +1796,33 @@ const lastHour = sorted[sorted.length - 1];
 
 if (hours.length === 0) return null;
 
-// 🔥 usa o PRIMEIRO horário (início do jogo)
-const firstHour = [...hours].sort()[0];
-const [h, m] = firstHour.split(":").map(Number);
+// 🔥 ordenação correta
+const sorted = [...hours].sort((a, b) => {
+  const [hA, mA] = a.split(":").map(Number);
+  const [hB, mB] = b.split(":").map(Number);
+  return hA !== hB ? hA - hB : mA - mB;
+});
 
-const data = new Date(r.date);
+const firstHour = sorted[0];
+const lastHour = sorted[sorted.length - 1];
 
-// 🔥 ajuste meia-noite
-if (h === 0) {
-  data.setDate(data.getDate() + 1);
-}
+const [h1, m1] = firstHour.split(":").map(Number);
+const [h2, m2] = lastHour.split(":").map(Number);
 
-data.setHours(h, m, 0, 0);
+// 🔥 início
+const inicio = new Date(r.date);
+if (h1 === 0) inicio.setDate(inicio.getDate() + 1);
+inicio.setHours(h1, m1, 0, 0);
 
+// 🔥 fim
+const fim = new Date(r.date);
+if (h2 === 0) fim.setDate(fim.getDate() + 1);
+fim.setHours(h2, m2, 0, 0);
+fim.setMinutes(fim.getMinutes() + 30);
 
-const diffHoras = (data - now) / (1000 * 60 * 60);
-
-const isFinished = now > data;
+// 🔥 cálculos corretos
+const isFinished = now > fim;
+const diffHoras = (inicio - now) / (1000 * 60 * 60);
 const podeCancelar = diffHoras > 2;
 
             return (
