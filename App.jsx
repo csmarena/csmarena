@@ -49,12 +49,12 @@ const generateHours = () => {
 const formatDateBR = (date) => {
   if (!date) return "-"; // 🔥 EVITA ERRO
 
-  const [y, m, d] = date.split("-");
+  const [y, m, d] = date?.split(":") || [];
   return `${d}/${m}/${y}`;
 };
 
 const hourToNumber = (hour) => {
-  const [h, m] = hour.split(":").map(Number);
+  const [h, m] = hour?.split(":").map(Number) || [0, 0];
   let value = h + m / 60;
   if (h === 0) value = 24;
   return value;
@@ -361,7 +361,7 @@ useEffect(() => {
 
     if (booking.date !== todayStr) return false;
 
-    const [h, m] = hour.split(":");
+    const [h, m] = hour?.split(":") || [];
 
     if (parseInt(h) < now.getHours()) return true;
     if (parseInt(h) === now.getHours() && parseInt(m) <= now.getMinutes())
