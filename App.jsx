@@ -1669,7 +1669,7 @@ useEffect(() => {
         />
 
         <p style={{ marginTop: "15px", fontWeight: "calibri" }}>
-              Reserve seus horários usando sempre estes dados.
+              Use apenas estes dados nas reservas.
             </p>
         
         <Button
@@ -2299,9 +2299,8 @@ cursor: canConfirm ? "pointer" : "not-allowed",
 
         {/* TEXTO QUE SOME */}
         {!confirmEnabled && (
-          <p style={{ fontSize: "12px", marginTop: "10px", opacity: 0.6 }}>
-            O botão será liberado após o pagamento do valor parcial desta
-            reserva.
+          <p style={{ fontSize: "12px", marginTop: "12px", opacity: 0.8 }}>
+            O botão será liberado apenas após o pagamento parcial.
           </p>
         )}
       </div>
