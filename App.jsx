@@ -1361,166 +1361,126 @@ useEffect(() => {
         {deletedReservations.length === 0 && <p>Nenhum item excluído</p>}
 
         {deletedReservations.map((r, i) => {
-  // 🔥 COLOCA TUDO AQUI DENTRO
-
   const hours = Array.isArray(r.hours) ? r.hours : [];
 
-  if (hours.length === 0) return (
-  <div key={i} className="card">
-    <p><b>Cliente:</b> {r.name}</p>
-    <p>Sem horários</p>
-  </div>
-);
-
-const sorted = [...hours].sort((a, b) => {
-  const [hA, mA] = a.split(":").map(Number);
-  const [hB, mB] = b.split(":").map(Number);
-
-  return hA !== hB ? hA - hB : mA - mB;
-});
-
-const firstHour = sorted[0];
-const lastHour = sorted[sorted.length - 1];
-
-  const [h1, m1] = firstHour.split(":").map(Number);
-  const [h2, m2] = lastHour.split(":").map(Number);
-
-  const inicio = new Date(r.date);
-  const fim = new Date(r.date);
-
-  if (h1 === 0) inicio.setDate(inicio.getDate() + 1);
-  if (h2 === 0) fim.setDate(fim.getDate() + 1);
-
-  inicio.setHours(h1, m1, 0, 0);
-  fim.setHours(h2, m2, 0, 0);
-  fim.setMinutes(fim.getMinutes() + 30);
-
-  // usa o now do useState (global)
-
-  const isFinished = now > fim;
-  const diffHoras = (inicio - now) / (1000 * 60 * 60);
-  const podeCancelar = diffHoras > 2;
-
-  // 🔽 AGORA SIM, RETORNA O JSX
   return (
     <div key={i} className="card">
-      
-            <p>
-              <b>Cliente:</b> {r.name}
-            </p>
-            <p>
-              <b>Telefone:</b> {formatPhone(r.phone)}
-            </p>
-            <p>
-              <b>Esporte:</b> {r.sport}
-            </p>
-            <p>
-              <b>Data:</b> {formatDateBR(r.date)}
-            </p>
-            <p>
-              <b>Horário:</b>{" "}
-              {(Array.isArray(r.hours) ? r.hours : []).join(", ")}
-            </p>
+      <p>
+        <b>Cliente:</b> {r.name}
+      </p>
+      <p>
+        <b>Telefone:</b> {formatPhone(r.phone)}
+      </p>
+      <p>
+        <b>Esporte:</b> {r.sport}
+      </p>
+      <p>
+        <b>Data:</b> {formatDateBR(r.date)}
+      </p>
+      <p>
+        <b>Horário:</b> {hours.join(", ")}
+      </p>
 
-            <button
-              disabled={restoringIds.includes(r.firestoreId)}
-              onClick={async () => {
-                const id = r.firestoreId;
+      <button
+        disabled={restoringIds.includes(r.firestoreId)}
+        onClick={async () => {
+          const id = r.firestoreId;
 
-                if (restoringIds.includes(id)) return;
+          if (restoringIds.includes(id)) return;
 
-                setRestoringIds((prev) => [...prev, id]);
+          setRestoringIds((prev) => [...prev, id]);
 
-                try {
-                  const restored = deletedReservations[i];
+          try {
+            const restored = deletedReservations[i];
 
-                  const exists = reservations.some(
-                    (res) => res.id === restored.firestoreId,
-                  );
+            const exists = reservations.some(
+              (res) => res.id === restored.firestoreId
+            );
 
-                  if (exists) {
-                    alert("Essa reserva já está ativa!");
+            if (exists) {
+              alert("Essa reserva já está ativa!");
+              setRestoringIds((prev) => prev.filter((x) => x !== id));
+              return;
+            }
 
-                    setRestoringIds((prev) => prev.filter((x) => x !== id)); // 🔥 destrava
-                    return;
-                  }
+            // 🔥 proteção contra duplicação
+            if (restored.type !== "cliente") {
+              const alreadyExists = reservations.some((res) => {
+                const sameDate = res.date === restored.date;
+                const sameName = res.name === restored.name;
+                const samePhone = res.phone === restored.phone;
 
-                  // 🔥 PROTEÇÃO CONTRA DUPLICAÇÃO
-                  if (restored.type !== "cliente") {
-                    const alreadyExists = reservations.some((res) => {
-                      const sameDate = res.date === restored.date;
-                      const sameName = res.name === restored.name;
-                      const samePhone = res.phone === restored.phone;
+                const sameHours =
+                  JSON.stringify([...(res.hours || [])].sort()) ===
+                  JSON.stringify([...(restored.hours || [])].sort());
 
-                      const sameHours =
-                        JSON.stringify([...(res.hours || [])].sort()) ===
-                        JSON.stringify([...(restored.hours || [])].sort());
+                return sameDate && sameName && samePhone && sameHours;
+              });
 
-                      return sameDate && sameName && samePhone && sameHours;
-                    });
+              if (alreadyExists) {
+                alert("Essa reserva já foi restaurada!");
+                return;
+              }
+            }
 
-                    if (alreadyExists) {
-                      alert("Essa reserva já foi restaurada!");
-                      return;
-                    }
-                  }
+            // 🔥 restaura
+            if (restored.type === "cliente") {
+              const existsClient = clients.some(
+                (c) => cleanPhone(c.phone) === cleanPhone(restored.phone)
+              );
 
-                  // 🔥 RESTAURA
-                  if (restored.type === "cliente") {
-                    const existsClient = clients.some(
-                      (c) => cleanPhone(c.phone) === cleanPhone(restored.phone),
-                    );
+              if (existsClient) {
+                alert("Cliente já existe!");
+                return;
+              }
 
-                    if (existsClient) {
-                      alert("Cliente já existe!");
-                      return;
-                    }
+              await addDoc(collection(db, "clients"), {
+                name: restored.name,
+                phone: restored.phone,
+                createdAt: Date.now(),
+              });
+            } else {
+              const { firestoreId, type, deletedAt, ...cleanData } = restored;
 
-                    await addDoc(collection(db, "clients"), {
-                      name: restored.name,
-                      phone: restored.phone,
-                      createdAt: Date.now(),
-                    });
-                  } else {
-                    const { firestoreId, type, deletedAt, ...cleanData } =
-                      restored;
+              await setDoc(doc(db, "reservas", restored.firestoreId), {
+                ...cleanData,
+                status: "ativa",
+                hours: Array.isArray(cleanData.hours)
+                  ? cleanData.hours
+                  : [],
+              });
+            }
 
-                    await setDoc(doc(db, "reservas", restored.firestoreId), {
-                      ...cleanData,
-                      status: "ativa",
-                      hours: Array.isArray(cleanData.hours)
-                        ? cleanData.hours
-                        : [],
-                    });
-                  }
+            // 🔥 remove da lixeira
+            await deleteDoc(doc(db, "lixeira", restored.firestoreId));
 
-                  // 🔥 REMOVE DA LIXEIRA (FIREBASE)
-                  await deleteDoc(doc(db, "lixeira", restored.firestoreId));
-
-                  // 🔥 REMOVE DO ESTADO LOCAL (IMEDIATO)
-                  setDeletedReservations((prev) =>
-                    prev.filter(
-                      (item) => item.firestoreId !== restored.firestoreId,
-                    ),
-                  );
-                } catch (error) {
-                  console.error("Erro ao restaurar:", error);
-                } finally {
-                  setRestoringIds((prev) => prev.filter((x) => x !== id));
-                }
-              }}
-              style={{
-                marginTop: "10px",
-                padding: "5px",
-                cursor: "pointer",
-                opacity: restoringIds.includes(r.firestoreId) ? 0.5 : 1,
-              }}
-            >
-              {restoringIds.includes(r.firestoreId)
-                ? "Restaurando..."
-                : "Restaurar"}
-            </button>
-</div>
+            // 🔥 remove da tela
+            setDeletedReservations((prev) =>
+              prev.filter(
+                (item) => item.firestoreId !== restored.firestoreId
+              )
+            );
+          } catch (error) {
+            console.error("Erro ao restaurar:", error);
+          } finally {
+            setRestoringIds((prev) =>
+              prev.filter((x) => x !== id)
+            );
+          }
+        }}
+        style={{
+          marginTop: "10px",
+          padding: "5px",
+          cursor: "pointer",
+          opacity: restoringIds.includes(r.firestoreId) ? 0.5 : 1,
+        }}
+      >
+        {restoringIds.includes(r.firestoreId)
+          ? "Restaurando..."
+          : "Restaurar"}
+      </button>
+    </div>
+  );
 })}
 </div>
 );
