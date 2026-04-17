@@ -832,23 +832,42 @@ useEffect(() => {
                   {calcPrice(Array.isArray(r.hours) ? r.hours : [])}
                 </p>
                 <p>
-                  <b>Status:</b>{" "}
-                  <span
-                    style={{
-                      color:
-                        r.status === "concluída"
-                          ? "green"
-                          : r.status === "cancelada"
-                            ? "red"
-                            : "black",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {r.status}
-                  </span>
-                </p>
-                {r.status !== "cancelada" && (
-                  {podeCancelar(r) && (
+  <b>Status:</b>{" "}
+  <span
+    style={{
+      color: r.status === "cancelada"
+        ? "red"
+        : isFinished
+        ? "green"
+        : "black",
+      fontWeight: "bold",
+    }}
+  >
+    {r.status === "cancelada"
+      ? "cancelada"
+      : isFinished
+      ? "concluída"
+      : "ativa"}
+  </span>
+</p>
+
+{r.status !== "cancelada" && podeCancelar && (
+  <Button
+    text="Cancelar"
+    type="secondary"
+    onClick={async () => {
+      if (window.confirm("Cancelar reserva?")) {
+        try {
+          await updateDoc(doc(db, "reservas", r.id), {
+            status: "cancelada",
+          });
+        } catch (error) {
+          console.error("Erro ao cancelar:", error);
+        }
+      }
+    }}
+  />
+)}
   <Button
     text="Cancelar"
     type="secondary"
