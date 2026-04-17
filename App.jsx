@@ -1367,8 +1367,39 @@ useEffect(() => {
 
         {deletedReservations.length === 0 && <p>Nenhum item excluído</p>}
 
-        {deletedReservations.map((r, i) => (
-          <div key={i} className="card">
+        {deletedReservations.map((r, i) => {
+  // 🔥 COLOCA TUDO AQUI DENTRO
+
+  const hours = Array.isArray(r.hours) ? r.hours : [];
+
+  if (hours.length === 0) return null;
+
+  const firstHour = [...hours].sort()[0];
+  const lastHour = [...hours].sort().slice(-1)[0];
+
+  const [h1, m1] = firstHour.split(":").map(Number);
+  const [h2, m2] = lastHour.split(":").map(Number);
+
+  const inicio = new Date(r.date);
+  const fim = new Date(r.date);
+
+  if (h1 === 0) inicio.setDate(inicio.getDate() + 1);
+  if (h2 === 0) fim.setDate(fim.getDate() + 1);
+
+  inicio.setHours(h1, m1, 0, 0);
+  fim.setHours(h2, m2, 0, 0);
+  fim.setMinutes(fim.getMinutes() + 30);
+
+  const now = new Date();
+
+  const isFinished = now > fim;
+  const diffHoras = (inicio - now) / (1000 * 60 * 60);
+  const podeCancelar = diffHoras > 2;
+
+  // 🔽 AGORA SIM, RETORNA O JSX
+  return (
+    <div key={i} className="card">
+      
             <p>
               <b>Cliente:</b> {r.name}
             </p>
