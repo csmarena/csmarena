@@ -1991,24 +1991,27 @@ const podeCancelar = diffHoras > 2;
                 onClick={() => setBooking({ ...booking, sport: s })}
               />
             ))}
-            <Button
-              text="Próximo"
-              onClick={() => {
-                if (!activeClient?.phone) return alert("Selecione um jogador");
-                if (!booking.sport) return alert("Escolha um esporte");
-                setBooking((prev) => ({
-                  ...prev,
-                  client: activeClient, // 🔥 trava o cliente aqui
-                }));
+            {step === 2 && (
+  <>
+    <Button
+      text="Próximo"
+      onClick={() => {
+        if (!activeClient?.phone) return alert("Selecione um jogador");
+        if (!booking.sport) return alert("Escolha um esporte");
 
-                setStep(3);
-              }}
-            />
-          </>
-        )}
+        setBooking((prev) => ({
+          ...prev,
+          client: activeClient,
+        }));
 
-        {step === 3 && (
-          <>
+        setStep(3);
+      }}
+    />
+  </>
+)}
+
+{step === 3 && (
+  <>
             <h2 className="titulo">ESCOLHA A DATA</h2>
 
             <input
