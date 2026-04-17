@@ -343,6 +343,7 @@ export default function App() {
   const [showClients, setShowClients] = useState(false);
 
   const [paymentTime, setPaymentTime] = useState(300); // 5 minutos
+  const [confirmEnabled, setConfirmEnabled] = useState(false);
 
   const hours = generateHours();
 
@@ -539,15 +540,23 @@ export default function App() {
     </button>
   );
   useEffect(() => {
-  if (page !== "payment") return;
-
   const timer = setInterval(() => {
-    // só força re-render
-    setPaymentTime((prev) => prev + 1);
+    setPaymentTime((prev) => {
+      if (prev <= 0) return 0;
+
+      const newTime = prev - 1;
+
+      // libera botão após 45 segundos
+      if (newTime <= (300 - 45)) {
+        setConfirmEnabled(true);
+      }
+
+      return newTime;
+    });
   }, 1000);
 
   return () => clearInterval(timer);
-}, [page]);
+}, []);
 
   
   const Back = () => {
