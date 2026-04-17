@@ -1711,7 +1711,7 @@ useEffect(() => {
           }}
         />
 
-        <p style={{ marginTop: "30px", fontWeight: "calibri" }}>
+        <p style={{ marginTop: "30px", fontWeight: "bold" }}>
               SEUS JOGOS AGENDADOS
             </p>
 
