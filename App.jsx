@@ -343,8 +343,8 @@ export default function App() {
 
   const [showClients, setShowClients] = useState(false);
 
-  const [paymentTime, setPaymentTime] = useState(500); // 5 minutos
-  const [confirmEnabled, setConfirmEnabled] = useState(false);
+  const [paymentTime, setPaymentTime] = useState(300); // 5 minutos
+
   const hours = generateHours();
 
   const isPastHour = (hour) => {
@@ -550,15 +550,7 @@ export default function App() {
   return () => clearInterval(timer);
 }, [page]);
 
-  useEffect(() => {
-    if (page === "payment") {
-      const unlock = setTimeout(() => {
-        setConfirmEnabled(true);
-      }, 45000); // 45 segundos
-
-      return () => clearTimeout(unlock);
-    }
-  }, [page]);
+  
   const Back = () => {
     if (page === "booking" && step > 1) {
       return (
@@ -2055,7 +2047,11 @@ export default function App() {
 const remaining = reservaAtual?.expiresAt
   ? Math.max(0, Math.floor((reservaAtual.expiresAt - Date.now()) / 1000))
   : 0;
+const createdAt = reservaAtual?.createdAt || 0;
+const secondsPassed = Math.floor((Date.now() - createdAt) / 1000);
 
+// 🔥 libera após 45 segundos
+const canConfirm = secondsPassed >= 45;
 const minutes = Math.floor(remaining / 60);
 const seconds = remaining % 60;
 
@@ -2155,10 +2151,10 @@ const seconds = remaining % 60;
         <button
           className="btn"
           style={{
-            background: confirmEnabled ? "" : "gray",
-            cursor: confirmEnabled ? "pointer" : "not-allowed",
+            background: canConfirm ? "" : "gray",
+cursor: canConfirm ? "pointer" : "not-allowed",
           }}
-          disabled={!confirmEnabled}
+          disabled={!canConfirm}
           onClick={async () => {
             if (!confirmEnabled) return;
 
