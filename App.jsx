@@ -2183,7 +2183,10 @@ cursor: canConfirm ? "pointer" : "not-allowed",
               // 🔥 verifica conflito antes de confirmar
               const conflito = reservations.find((r) => {
                 if (
-                  r.id === booking.tempId ||
+  r.id === booking.tempId ||
+  r.status !== "ativa"
+)
+return false;
                   r.status === "cancelada" ||
                   r.status === "expirada"
                 )
