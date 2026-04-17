@@ -1256,7 +1256,8 @@ useEffect(() => {
 >
         <Back />
 
-        <h2>PAGAMENTO (PIX)</h2>
+        {/* DADOS DA CONTA */}
+        <h3 style={{ marginTop: "20px" }}>DADOS DA CONTA:</h3>
 
         {/* PIX */}
         <div className="card">
@@ -1270,8 +1271,7 @@ useEffect(() => {
           />
         </div>
 
-        {/* DADOS DA CONTA */}
-        <h3 style={{ marginTop: "20px" }}>DADOS DA CONTA:</h3>
+      
 
         <div className="card">
           <p>
