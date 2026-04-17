@@ -1668,7 +1668,7 @@ useEffect(() => {
           }}
         />
 
-        <p style={{ marginTop: "20px", fontWeight: "calibri" }}>
+        <p style={{ marginTop: "15px", fontWeight: "calibri" }}>
               Reserve seus horários usando sempre estes dados.
             </p>
         
