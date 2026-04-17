@@ -1823,7 +1823,7 @@ const podeCancelar = diffHoras > 2;
   )}
 </div>
             );
-          })}   // 🔥 FECHA O MAP
+          })}   
 
       </div>
     );
