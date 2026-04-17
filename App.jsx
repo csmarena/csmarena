@@ -2198,12 +2198,9 @@ cursor: canConfirm ? "pointer" : "not-allowed",
                 if (
   r.id === booking.tempId ||
   r.status !== "ativa"
-)
-return false;
-                  r.status === "cancelada" ||
-                  r.status === "expirada"
-                )
-                  return false;
+) {
+  return false;
+}
 
                 if (r.date !== booking.date) return false;
 
