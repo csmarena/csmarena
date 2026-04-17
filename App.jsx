@@ -1711,7 +1711,9 @@ useEffect(() => {
           }}
         />
 
-        <h2 className="titulo">JOGOS AGENDADOS</h2>
+        <p style={{ marginTop: "30px", fontWeight: "calibri" }}>
+              SEUS JOGOS AGENDADOS
+            </p>
 
         {sortedReservations
           .filter(
