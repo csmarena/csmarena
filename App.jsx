@@ -1794,7 +1794,7 @@ useEffect(() => {
 if (hours.length === 0) return null;
 
 // 🔥 usa o PRIMEIRO horário (início do jogo)
-const firstHour = hours[0];
+const firstHour = [...hours].sort()[0];
 const [h, m] = firstHour.split(":").map(Number);
 
 const data = new Date(r.date);
@@ -1808,7 +1808,10 @@ data.setHours(h, m, 0, 0);
 
 const now = new Date();
 
-const diffHours = (data - now) / (1000 * 60 * 60);
+const diffHoras = (data - now) / (1000 * 60 * 60);
+
+const isFinished = now > data;
+const podeCancelar = diffHoras > 2;
 
             return (
               <div key={i} className="card">
@@ -1834,11 +1837,11 @@ const diffHours = (data - now) / (1000 * 60 * 60);
 
                 {r.status === "cancelada" ? (
                   <p className="cancelada">Reserva cancelada</p>
-                ) : now > data ? (
+) : isFinished ? (
   <p style={{ color: "green", fontWeight: "bold" }}>
     Jogo concluído
   </p>
-) : diffHours >= 2 ? (
+) : podeCancelar ? (
                   <Button
                     text="Cancelar"
                     type="secondary"
