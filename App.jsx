@@ -1845,101 +1845,101 @@ const podeCancelar = diffHoras > 2;
         )}
 
         {step === 2 && (
-          <>
-            <h3 style={{ marginBottom: "10px" }}>DADOS DO JOGADOR</h3>
-
-            <button
-  onClick={() => {
-    if (isAdmin) setShowClients(!showClients);
-  }}
-  style={{
-    width: "100%",
-    padding: "12px",
-    borderRadius: "10px",
-    border: "1px solid #ccc",
-    background: "#fff",
-    color: "#000", // 👈 AQUI ESTÁ A CORREÇÃO
-    marginBottom: "10px",
-    cursor: isAdmin ? "pointer" : "default",
-    textAlign: "left",
-  }}
->
-  {activeClient.name
-    ? `${activeClient.name} (${activeClient.phone})`
-    : "Nome do Jogador"}
-</button>
-
-            {isAdmin && showClients && (
-              <div
-                style={{
-                  maxHeight: "200px",
-                  overflowY: "auto",
-                  border: "1px solid #ccc",
-                  borderRadius: "10px",
-                  padding: "10px",
-                  marginBottom: "20px",
-                  background: "#fff",
-                }}
-              >
-                {/* 🔍 CAMPO DE BUSCA */}
-                <input
-                  placeholder="Buscar cliente..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "8px",
-                    marginBottom: "10px",
-                    borderRadius: "8px",
-                    border: "1px solid #ccc",
-                  }}
-                />
-                {allClients
-                  .filter((c) =>
-                    (c.name || "")
-                      .toLowerCase()
-                      .includes((search || "").toLowerCase()),
-                  )
-                  .map((c) => (
-                    <div
-                      key={c.id}
-                      onClick={() => {
-                        setSelectedClient(c);
-                        setShowClients(false);
-                      }}
-                      style={{
-                        padding: "10px",
-                        marginBottom: "5px",
-                        borderRadius: "8px",
-                        cursor: "pointer",
-                        background:
-                          cleanPhone(user.phone) === cleanPhone(c.phone)
-                            ? "#eafaf1"
-                            : "transparent",
-                      }}
-                    >
-                      <b>{c.name}</b>
-                      <br />
-                      <span style={{ fontSize: "12px" }}>
-                        {formatPhone(c.phone)}
-                      </span>
-                    </div>
-                  ))}
-              </div>
-            )}
-
-            <h2 className="titulo">ESCOLHA O ESPORTE</h2>
-            {sports.map((s) => (
-              <Button
-                key={s}
-                text={s}
-                type="secondary"
-                active={booking.sport === s}
-                onClick={() => setBooking({ ...booking, sport: s })}
-              />
-            ))}
-            {step === 2 && (
   <>
+    <h3 style={{ marginBottom: "10px" }}>DADOS DO JOGADOR</h3>
+
+    <button
+      onClick={() => {
+        if (isAdmin) setShowClients(!showClients);
+      }}
+      style={{
+        width: "100%",
+        padding: "12px",
+        borderRadius: "10px",
+        border: "1px solid #ccc",
+        background: "#fff",
+        color: "#000",
+        marginBottom: "10px",
+        cursor: isAdmin ? "pointer" : "default",
+        textAlign: "left",
+      }}
+    >
+      {activeClient.name
+        ? `${activeClient.name} (${activeClient.phone})`
+        : "Nome do Jogador"}
+    </button>
+
+    {isAdmin && showClients && (
+      <div
+        style={{
+          maxHeight: "200px",
+          overflowY: "auto",
+          border: "1px solid #ccc",
+          borderRadius: "10px",
+          padding: "10px",
+          marginBottom: "20px",
+          background: "#fff",
+        }}
+      >
+        <input
+          placeholder="Buscar cliente..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          style={{
+            width: "100%",
+            padding: "8px",
+            marginBottom: "10px",
+            borderRadius: "8px",
+            border: "1px solid #ccc",
+          }}
+        />
+
+        {allClients
+          .filter((c) =>
+            (c.name || "")
+              .toLowerCase()
+              .includes((search || "").toLowerCase())
+          )
+          .map((c) => (
+            <div
+              key={c.id}
+              onClick={() => {
+                setSelectedClient(c);
+                setShowClients(false);
+              }}
+              style={{
+                padding: "10px",
+                marginBottom: "5px",
+                borderRadius: "8px",
+                cursor: "pointer",
+                background:
+                  cleanPhone(user.phone) === cleanPhone(c.phone)
+                    ? "#eafaf1"
+                    : "transparent",
+              }}
+            >
+              <b>{c.name}</b>
+              <br />
+              <span style={{ fontSize: "12px" }}>
+                {formatPhone(c.phone)}
+              </span>
+            </div>
+          ))}
+      </div>
+    )}
+
+    <h2 className="titulo">ESCOLHA O ESPORTE</h2>
+
+    {sports.map((s) => (
+      <Button
+        key={s}
+        text={s}
+        type="secondary"
+        active={booking.sport === s}
+        onClick={() => setBooking({ ...booking, sport: s })}
+      />
+    ))}
+
     <Button
       text="Próximo"
       onClick={() => {
