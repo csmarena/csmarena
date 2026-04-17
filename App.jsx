@@ -499,22 +499,28 @@ useEffect(() => {
     return "";
   };
   const isFinished = (r) => {
-    // 🔥 GARANTE ARRAY SEMPRE
-    const hours = Array.isArray(r.hours) ? r.hours : [];
+  const hours = Array.isArray(r.hours) ? r.hours : [];
 
-    // 🔥 se não tiver horário, não finaliza
-    if (hours.length === 0) return false;
+  if (hours.length === 0) return false;
 
-    const lastHour = hours[hours.length - 1];
+  const lastHour = hours[hours.length - 1];
+  if (!lastHour) return false;
 
-    // 🔥 segurança extra
-    if (!lastHour) return false;
+  const [h, m] = lastHour.split(":").map(Number);
 
-    const reservaDateTime = new Date(r.date + "T" + lastHour);
-    const now = new Date();
+  const data = new Date(r.date);
 
-    return now > reservaDateTime;
-  };
+  // 🔥 CORREÇÃO: meia-noite vai pro dia seguinte
+  if (h === 0) {
+    data.setDate(data.getDate() + 1);
+  }
+
+  data.setHours(h, m, 0, 0);
+
+  const now = new Date();
+
+  return now > data;
+};
 
   const sortedReservations = [...reservations].sort((a, b) => {
     const aHours = Array.isArray(a.hours) ? a.hours : [];
