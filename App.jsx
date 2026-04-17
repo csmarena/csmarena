@@ -653,14 +653,14 @@ useEffect(() => {
           </button>
 
           <Button
-            text="📅 Calendário"
+            text="📅 CALENDÁRIO"
             onClick={() => setAdminPage("calendar")}
           />
-          <Button text="📋 Agendamentos" onClick={() => setAdminPage("list")} />
-          <Button text="👥 Clientes" onClick={() => setAdminPage("clients")} />
-          <Button text="💰 Pagamento" onClick={() => setAdminPage("payment")} />
+          <Button text="📋 AGENDAMENTOS" onClick={() => setAdminPage("list")} />
+          <Button text="👥 JOGADORES" onClick={() => setAdminPage("clients")} />
+          <Button text="💰 PAGAMENTO" onClick={() => setAdminPage("payment")} />
           <Button
-            text="➕ Novo Agendamento"
+            text="➕ NOVA RESERVA"
             onClick={() => {
               setPage("booking");
               setStep(2);
