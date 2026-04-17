@@ -1520,11 +1520,11 @@ const lastHour = sorted[sorted.length - 1];
                 ? "Restaurando..."
                 : "Restaurar"}
             </button>
-          </div>
-        ))}
-      </div>
-    );
-  }
+</div>
+})}
+</div>
+);
+}
   // ================= HOME =================
   if (page === "home") {
     return (
