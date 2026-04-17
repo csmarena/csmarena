@@ -1908,33 +1908,37 @@ useEffect(() => {
   setBooking(updatedBooking);
 
   setStep(4);
-                    return;
-                  }
+  return;
+}
 
                   // 🔥 cria nova reserva
-                  const docRef = await addDoc(collection(db, "reservas"), {
-                    sport: booking.sport,
-                    date: booking.date,
-                    hours: [],
-                    name: booking.client?.name,
-                    phone: cleanPhone(booking.client?.phone),
-                    status: "pendente",
-                    expiresAt: Date.now() + 5 * 60 * 1000,
-                    createdAt: Date.now(),
-                  });
+const docRef = await addDoc(collection(db, "reservas"), {
+  sport: booking.sport,
+  date: booking.date,
+  hours: [],
+  name: booking.client?.name,
+  phone: cleanPhone(booking.client?.phone),
+  status: "pendente",
+  expiresAt: Date.now() + 5 * 60 * 1000,
+  createdAt: Date.now(),
+});
 
-                  // 🔥 ADICIONE ISSO
-                  console.log("CRIADO ID:", docRef.id);
-
-                  // 🔥 GUARDA O ID
-                  setBooking((prev) => ({
-  ...prev,
+// 🔥 cria objeto atualizado corretamente
+const updatedBooking = {
+  ...booking,
   tempId: docRef.id,
-  hours: [], // 🔥 LIMPA HORÁRIOS AQUI TAMBÉM
-}));
-                  localStorage.setItem("tempId", docRef.id);
+  hours: [], // limpa horários
+};
 
-                  setStep(4);
+// 🔥 salva no state
+setBooking(updatedBooking);
+
+// 🔥 salva CORRETO no localStorage
+localStorage.setItem("tempId", docRef.id);
+
+
+// 🔥 vai pro resumo
+setStep(4);
                 } catch (error) {
                   console.error("Erro ao criar reserva temporária:", error);
                   alert("Erro ao reservar horário");
@@ -1982,7 +1986,11 @@ useEffect(() => {
                 const hours = Array.isArray(booking.hours) ? booking.hours : [];
 
                 if (hours.length === 0) return alert("Escolha um horário");
+const finalBooking = {
+  ...booking,
+};
 
+localStorage.setItem("booking_temp", JSON.stringify(finalBooking));
                 setStep(5);
               }}
             />
