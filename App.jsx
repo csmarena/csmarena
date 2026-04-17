@@ -1819,21 +1819,19 @@ const podeCancelar = diffHoras > 2;
           });
         } catch (error) {
           console.error("Erro ao cancelar:", error);
-        }
-      }
-    }}
-  />
-) : (
-  <p className="cancel-info">
-    O prazo para cancelar expirou. VEM PRA ARENA!
-  </p>
-)}
-              </div>
-            );
-          })}
+                }
+              }
+            }}
+          />
+        ) : (
+          <p className="cancel-info">
+            O prazo para cancelar expirou. VEM PRA ARENA!
+          </p>
+        )}
       </div>
     );
-  }
+  })}
+
 
   if (page === "booking") {
     return (
