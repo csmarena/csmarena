@@ -2040,19 +2040,32 @@ export default function App() {
 
   if (page === "payment") {
 
+  const savedTempId = localStorage.getItem("tempId");
+
   const reservaAtual = reservations.find(
     r => r.id === (booking.tempId || savedTempId)
   );
 
+  // 🔒 evita tela preta
   if (!reservaAtual) {
-    return <p>Carregando pagamento...</p>;
+    return (
+      <div className="container">
+        <p>Carregando pagamento...</p>
+      </div>
+    );
   }
 
   const createdAt = reservaAtual.createdAt || 0;
   const secondsPassed = Math.floor((Date.now() - createdAt) / 1000);
+
+  // 🔓 libera após 45 segundos
   const canConfirm = secondsPassed >= 45;
-const minutes = Math.floor(remaining / 60);
-const seconds = remaining % 60;
+
+  const remainingMs = reservaAtual.expiresAt - Date.now();
+  const remaining = Math.max(0, Math.floor(remainingMs / 1000));
+
+  const minutes = Math.floor(remaining / 60);
+  const seconds = remaining % 60;
 
     const sorted = [
       ...(Array.isArray(booking.hours) ? booking.hours : []),
