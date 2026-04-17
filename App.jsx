@@ -637,6 +637,9 @@ useEffect(() => {
 >
           <Back />
           <h2 className="titulo">ADMINISTRAÇÃO</h2>
+          <p style={{ marginTop: "20px", fontWeight: "bold" }}>
+              CSM ARENA
+            </p>
           <button
             onClick={() => setAdminPage("trash")}
             style={{
