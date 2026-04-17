@@ -1907,8 +1907,6 @@ useEffect(() => {
 
   setBooking(updatedBooking);
 
-  localStorage.setItem("booking_temp", JSON.stringify(updatedBooking)); // 👈 AQUI
-
   setStep(4);
                     return;
                   }
@@ -1935,7 +1933,7 @@ useEffect(() => {
   hours: [], // 🔥 LIMPA HORÁRIOS AQUI TAMBÉM
 }));
                   localStorage.setItem("tempId", docRef.id);
-localStorage.setItem("booking_temp", JSON.stringify(booking));
+
                   setStep(4);
                 } catch (error) {
                   console.error("Erro ao criar reserva temporária:", error);
