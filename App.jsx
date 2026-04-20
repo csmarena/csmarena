@@ -60,9 +60,18 @@ const formatDateBR = (date) => {
 };
 
 const hourToNumber = (hour) => {
-  const [h, m] = hour?.split(":").map(Number) || [0, 0];
+  if (!hour) return 0;
+
+  // 🔥 pega só o início do intervalo
+  const clean = hour.includes("-") ? hour.split("-")[0] : hour;
+
+  const [h, m] = clean.split(":").map(Number);
+
   let value = h + m / 60;
+
+  // 🔥 mantém sua lógica do 00:00 = 24
   if (h === 0) value = 24;
+
   return value;
 };
 
