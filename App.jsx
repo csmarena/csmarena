@@ -2336,7 +2336,7 @@ cursor: canConfirm ? "pointer" : "not-allowed",
   const endB = toMinutes(sortedB[sortedB.length - 1]) + 30;
 
   // 🔥 conflito REAL (sobreposição)
-  return startB < endR && endB > startR;
+  return startB < endR && endB > startR && !(startB === startR || endB === endR);
 });
 
               if (conflito) {
