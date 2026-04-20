@@ -434,11 +434,24 @@ const isPastHour = (hour) => {
 const isBooked = (hour) => {
   return reservations.some((r) => {
     if (r.date !== booking.date) return false;
-    if (r.status !== "ativa") return false;
 
-    const hours = Array.isArray(r.hours) ? r.hours : [];
+    // 🔥 bloqueia reservas ATIVAS
+    if (r.status === "ativa") {
+      return (r.hours || []).includes(hour);
+    }
 
-    return hours.includes(hour);
+    // 🔥 bloqueia reservas PENDENTES (temporárias)
+    if (r.status === "pendente") {
+      if (!r.expiresAt) return false;
+
+      const aindaValida = Date.now() < r.expiresAt;
+
+      if (!aindaValida) return false;
+
+      return (r.hours || []).includes(hour);
+    }
+
+    return false;
   });
 };
 
@@ -462,38 +475,34 @@ const isBooked = (hour) => {
     }
   };
 
-  const calcDuration = (hoursList = []) => {
-    if (!Array.isArray(hoursList) || hoursList.length <= 1) return 0.5;
-    return (hoursList.length - 1) * 0.5;
-  };
+const calcDuration = (hours) => {
+  if (!Array.isArray(hours)) return 0;
 
-  const calcPrice = (hoursList = []) => {
-    if (!Array.isArray(hoursList) || hoursList.length === 0) return "";
+  return hours.length * 0.5;
+};
 
-    const sorted = [...hoursList].sort(
-      (a, b) => hourToNumber(a) - hourToNumber(b),
-    );
+const calcPrice = (hours) => {
+  if (!Array.isArray(hours) || hours.length === 0) return "R$ 0,00";
 
-    const duration = calcDuration(hoursList);
+  const duration = calcDuration(hours);
 
-    const startHour = hourToNumber(sorted[0]);
-    const endHour = hourToNumber(sorted[sorted.length - 1]);
+  // pega o primeiro horário para definir turno
+  const first = hours[0];
+  const startHour = parseInt(first.split("-")[0].split(":")[0]);
 
-    if (startHour < 18 && endHour > 18) {
-      return "Valor negociado (tarde/noite)";
-    }
+  // 🌙 NOITE
+  if (startHour >= 18) {
+    const total = duration * 50;
+    return `R$ ${total.toFixed(2).replace(".", ",")}`;
+  }
 
-    if (startHour >= 18) {
-      const total = duration * 50;
-      return `R$ ${total.toFixed(2)}`;
-    }
+  // 🌞 DAYUSE
+  if (duration <= 2) {
+    return "R$ 5,00 / pessoa";
+  }
 
-    if (endHour <= 18) {
-      return duration <= 2 ? "R$ 5,00 por pessoa" : "R$ 10,00 por pessoa";
-    }
-
-    return "";
-  };
+  return "R$ 10,00 / pessoa";
+};
 
   const sortedReservations = [...reservations].sort((a, b) => {
     const aHours = Array.isArray(a.hours) ? a.hours : [];
@@ -2011,7 +2020,7 @@ const docRef = await addDoc(collection(db, "reservas"), {
   name: booking.client?.name,
   phone: cleanPhone(booking.client?.phone),
   status: "pendente",
-  expiresAt: Date.now() + 5 * 60 * 1000,
+  expiresAt: Date.now() + 3 * 60 * 1000,
   createdAt: Date.now(),
 });
 
@@ -2082,6 +2091,14 @@ const finalBooking = {
   ...booking,
 };
 
+try {
+  await updateDoc(doc(db, "reservas", booking.tempId), {
+    hours: Array.isArray(booking.hours) ? booking.hours : [],
+  });
+} catch (error) {
+  console.error("Erro ao salvar horários:", error);
+}
+
 localStorage.setItem("booking_temp", JSON.stringify(finalBooking));
                 setStep(5);
               }}
@@ -2108,15 +2125,23 @@ localStorage.setItem("booking_temp", JSON.stringify(finalBooking));
               </p>
               <p>
                 <b>Horários:</b>{" "}
-                {(Array.isArray(booking.hours) ? booking.hours : []).join(", ")}
+                {(Array.isArray(booking.hours) ? booking.hours : [])
+  .map((h) => h.replace("-", " às "))
+  .join(", ")}
               </p>
-              <p>
-                <b>Duração:</b>{" "}
-                {calcDuration(
-                  Array.isArray(booking.hours) ? booking.hours : [],
-                )}
-                h
-              </p>
+<p>
+  <b>Duração:</b>{" "}
+  {(() => {
+    const d = calcDuration(Array.isArray(booking.hours) ? booking.hours : []);
+    const horas = Math.floor(d);
+    const minutos = d % 1 === 0 ? 0 : 30;
+
+    if (minutos === 0) return `${horas}h`;
+    if (horas === 0) return `30min`;
+
+    return `${horas}h ${minutos}min`;
+  })()}
+</p>
               <p>
                 <b>Valor:</b>{" "}
                 {calcPrice(Array.isArray(booking.hours) ? booking.hours : [])}
@@ -2192,8 +2217,21 @@ localStorage.setItem("booking_temp", JSON.stringify(finalBooking));
     const startHour = hourToNumber(sorted[0]);
     const endHour = hourToNumber(sorted[sorted.length - 1]);
 
-    const isNight = startHour >= 18 || endHour > 18;
-    const paymentValue = isNight ? "R$ 10,00" : "R$ 5,00";
+const duration = calcDuration(booking.hours || []);
+
+const first = booking.hours?.[0] || "00:00-00:30";
+const startHour = parseInt(first.split("-")[0].split(":")[0]);
+
+let paymentValue = "R$ 5,00";
+
+// 🌙 NOITE
+if (startHour >= 18) {
+  paymentValue = "R$ 10,00";
+}
+// 🌞 DAYUSE acima de 2h
+else if (duration > 2) {
+  paymentValue = "R$ 10,00";
+}
 
     return (
       <div
