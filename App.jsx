@@ -404,23 +404,32 @@ useEffect(() => {
 
   const hours = generateHours();
 
-  const isPastHour = (hour) => {
-    if (!booking.date) return false;
-    if (hour === "00:00") return false;
+const isPastHour = (hour) => {
+  if (!booking.date) return false;
 
-    const todayStr = new Date().toLocaleDateString("sv-SE");
+  const now = new Date();
 
-    if (booking.date !== todayStr) return false;
+  // data selecionada (força formato correto sem fuso bugado)
+  const selectedDate = new Date(booking.date + "T00:00:00");
 
-    const [h, m] = hour?.split(":") || [];
+  // hoje sem horário
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
-    if (parseInt(h) < now.getHours()) return true;
-    if (parseInt(h) === now.getHours() && parseInt(m) <= now.getMinutes())
-      return true;
+  // 🔥 dia futuro → tudo liberado
+  if (selectedDate > today) return false;
 
-    return false;
-  };
+  // 🔥 dia passado → tudo bloqueado
+  if (selectedDate < today) return true;
 
+  // 🔥 HOJE → compara horário
+  const [h, m] = hour.split(":").map(Number);
+
+  const slotTime = new Date();
+  slotTime.setHours(h, m, 0, 0);
+
+  return slotTime <= now;
+};
 const isBooked = (hour) => {
   return reservations.some((r) => {
     if (r.date !== booking.date) return false;
