@@ -40,7 +40,7 @@ const generateHours = () => {
   const hours = [];
 
   for (let h = 6; h < 24; h++) {
-    const nextH = h + 1;
+    const nextH = h === 23 ? 0 : h + 1; // 🔥 AQUI ESTÁ A CORREÇÃO
 
     const hStr = String(h).padStart(2, "0");
     const nextHStr = String(nextH).padStart(2, "0");
@@ -62,14 +62,14 @@ const formatDateBR = (date) => {
 const hourToNumber = (hour) => {
   if (!hour) return 0;
 
-  // 🔥 pega só o início do intervalo
-  const clean = hour.includes("-") ? hour.split("-")[0] : hour;
+  // 🔥 pega só o início do intervalo (antes do "-")
+  const start = hour.includes("-") ? hour.split("-")[0] : hour;
 
-  const [h, m] = clean.split(":").map(Number);
+  const [h, m] = start.split(":").map(Number);
 
   let value = h + m / 60;
 
-  // 🔥 mantém sua lógica do 00:00 = 24
+  // 🔥 mantém sua regra de meia-noite
   if (h === 0) value = 24;
 
   return value;
