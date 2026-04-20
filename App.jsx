@@ -2211,23 +2211,21 @@ setStep(4);
   const minutes = Math.floor(remaining / 60);
   const seconds = remaining % 60;
 
-    const sorted = [
-      ...(Array.isArray(booking.hours) ? booking.hours : []),
-    ].sort((a, b) => hourToNumber(a) - hourToNumber(b));
+const sorted = [
+  ...(Array.isArray(booking.hours) ? booking.hours : []),
+].sort((a, b) => hourToNumber(a) - hourToNumber(b));
 
+if (!sorted.length) return null;
+
+const startHour = hourToNumber(sorted[0]);
+const endHour = hourToNumber(sorted[sorted.length - 1]);
 
 const duration = calcDuration(booking.hours || []);
 
-const first = booking.hours?.[0] || "00:00-00:30";
-startHour = parseInt(first.split("-")[0].split(":")[0]);
-
-const first = booking.hours?.[0] || "00:00-00:30";
-startHour = parseInt(first.split("-")[0].split(":")[0]);
-    
 let paymentValue = "R$ 5,00";
 
 // 🌙 NOITE
-if (startHour >= 18) {
+if (startHour >= 18 * 60) {
   paymentValue = "R$ 10,00";
 }
 // 🌞 DAYUSE acima de 2h
