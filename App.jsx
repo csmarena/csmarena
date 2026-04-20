@@ -2312,23 +2312,31 @@ cursor: canConfirm ? "pointer" : "not-allowed",
             try {
               // 🔥 verifica conflito antes de confirmar
               const conflito = reservations.find((r) => {
-  // ignora a própria reserva temporária e reservas não ativas
-  if (
-    r.id === booking.tempId ||
-    r.status !== "ativa"
-  ) {
-    return false;
-  }
-
-  // datas diferentes não conflitam
+  if (r.id === booking.tempId || r.status !== "ativa") return false;
   if (r.date !== booking.date) return false;
 
-  // garante arrays válidos
   const hoursR = Array.isArray(r.hours) ? r.hours : [];
   const hoursB = Array.isArray(booking.hours) ? booking.hours : [];
 
-  // verifica se algum horário bate
-  return hoursB.some((h) => hoursR.includes(h));
+  if (hoursR.length === 0 || hoursB.length === 0) return false;
+
+  const toMinutes = (h) => {
+    const [hh, mm] = h.split(":").map(Number);
+    return hh * 60 + mm;
+  };
+
+  // 🔥 ordena pra garantir
+  const sortedR = [...hoursR].sort((a, b) => toMinutes(a) - toMinutes(b));
+  const sortedB = [...hoursB].sort((a, b) => toMinutes(a) - toMinutes(b));
+
+  const startR = toMinutes(sortedR[0]);
+  const endR = toMinutes(sortedR[sortedR.length - 1]) + 30;
+
+  const startB = toMinutes(sortedB[0]);
+  const endB = toMinutes(sortedB[sortedB.length - 1]) + 30;
+
+  // 🔥 conflito REAL (sobreposição)
+  return startB < endR && endB > startR;
 });
 
               if (conflito) {
