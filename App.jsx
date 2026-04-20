@@ -37,12 +37,18 @@ const sports = [
 ];
 
 const generateHours = () => {
-  let hours = [];
+  const hours = [];
+
   for (let h = 6; h < 24; h++) {
-    hours.push(`${String(h).padStart(2, "0")}:00`);
-    hours.push(`${String(h).padStart(2, "0")}:30`);
+    const nextH = h + 1;
+
+    const hStr = String(h).padStart(2, "0");
+    const nextHStr = String(nextH).padStart(2, "0");
+
+    hours.push(`${hStr}:00-${hStr}:30`);
+    hours.push(`${hStr}:30-${nextHStr}:00`);
   }
-  hours.push("00:00");
+
   return hours;
 };
 
@@ -2044,23 +2050,23 @@ setStep(4);
                 const booked = isBooked(h);
 
                 return (
-                  <button
-                    key={h}
-                    disabled={past || booked}
-                    className={
-                      past || booked
-                        ? "hour disabled"
-                        : (Array.isArray(booking.hours)
-                              ? booking.hours
-                              : []
-                            ).includes(h)
-                          ? "selected"
-                          : "hour"
-                    }
-                    onClick={() => toggleHour(h)}
-                  >
-                    {h}
-                  </button>
+<button
+  key={h}
+  disabled={past || booked}
+  className={
+    past || booked
+      ? "hour disabled"
+      : (Array.isArray(booking.hours)
+            ? booking.hours
+            : []
+          ).includes(h)
+        ? "selected"
+        : "hour"
+  }
+  onClick={() => toggleHour(h)}
+>
+  {h.replace("-", " às ")}
+</button>
                 );
               })}
             </div>
