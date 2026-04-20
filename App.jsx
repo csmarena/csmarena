@@ -415,13 +415,9 @@ const isPastHour = (hour) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  // futuro
   if (selectedDate > today) return false;
-
-  // passado
   if (selectedDate < today) return true;
 
-  // hoje → compara horário
   const [h, m] = hour.split(":").map(Number);
 
   const slotTime = new Date();
@@ -430,24 +426,13 @@ const isPastHour = (hour) => {
   return slotTime <= now;
 };
 const isBooked = (hour) => {
-  const current = hourToNumber(hour);
-
   return reservations.some((r) => {
     if (r.date !== booking.date) return false;
     if (r.status !== "ativa") return false;
 
     const hours = Array.isArray(r.hours) ? r.hours : [];
-    if (hours.length === 0) return false;
 
-    const sorted = [...hours].sort(
-      (a, b) => hourToNumber(a) - hourToNumber(b)
-    );
-
-    const start = hourToNumber(sorted[0]);
-    const end = hourToNumber(sorted[sorted.length - 1]) + 30;
-
-    // 🔥 BLOQUEIA SOMENTE DENTRO DO INTERVALO (NÃO INÍCIO/FIM)
-    return current > start && current < end;
+    return hours.includes(hour);
   });
 };
 
