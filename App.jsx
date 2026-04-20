@@ -437,17 +437,8 @@ const isBooked = (hour) => {
     const hours = Array.isArray(r.hours) ? r.hours : [];
     if (hours.length === 0) return false;
 
-    const sorted = [...hours].sort(
-      (a, b) => hourToNumber(a) - hourToNumber(b)
-    );
-
-    const start = hourToNumber(sorted[0]);
-    const end = hourToNumber(sorted[sorted.length - 1]) + 30;
-
-    const current = hourToNumber(hour);
-
-    // 🔥 bloqueia apenas se estiver DENTRO do intervalo
-    return current > start && current < end;
+    // 🔥 BLOQUEIA SOMENTE OS HORÁRIOS EXATOS
+    return hours.includes(hour);
   });
 };
 
