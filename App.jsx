@@ -2220,8 +2220,11 @@ setStep(4);
 
 const duration = calcDuration(booking.hours || []);
 
-const first = booking.hours?.[0] || "00:00-00:30";
-startHour = parseInt(first.split("-")[0].split(":")[0]);
+const first = booking.hours?.[0];
+
+if (!first) return null; // 🔥 evita quebrar a tela
+
+const startHour = parseInt(first.split("-")[0].split(":")[0]);
 
 let paymentValue = "R$ 5,00";
 
