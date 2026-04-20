@@ -209,11 +209,22 @@ html, body, #root {
   cursor: pointer;
 }
 
-/* 🔵 selecionado */
 .selected {
+  height: 65px; /* 🔥 mesma altura */
+  font-size: 17px;
+  font-weight: bold;
+
+  border-radius: 12px;
+  border: none;
+
   background: #2c4f73;
   color: #fff;
-  border: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
 }
 
 /* ⚫ indisponível */
