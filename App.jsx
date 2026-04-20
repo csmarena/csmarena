@@ -435,9 +435,8 @@ const isBooked = (hour) => {
     if (r.status !== "ativa") return false;
 
     const hours = Array.isArray(r.hours) ? r.hours : [];
-    if (hours.length === 0) return false;
 
-    // 🔥 BLOQUEIA SOMENTE OS HORÁRIOS EXATOS
+    // 🔥 bloqueia SOMENTE horários EXATOS
     return hours.includes(hour);
   });
 };
