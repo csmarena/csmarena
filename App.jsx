@@ -421,48 +421,27 @@ useEffect(() => {
     return false;
   };
 
-  const isBooked = (hour) => {
-    let startCount = 0;
-    let endCount = 0;
+const isBooked = (hour) => {
+  return reservations.some((r) => {
+    if (r.date !== booking.date) return false;
+    if (r.status !== "ativa") return false;
 
-    for (let r of reservations) {
-      const invalidStatus = ["cancelada", "expirada", "pendente"];
+    const hours = Array.isArray(r.hours) ? r.hours : [];
+    if (hours.length === 0) return false;
 
-      if (
-        r.date !== booking.date ||
-        invalidStatus.includes(r.status) ||
-        !r.hours ||
-        r.hours.length === 0
-      )
-        continue;
+    const sorted = [...hours].sort(
+      (a, b) => hourToNumber(a) - hourToNumber(b)
+    );
 
-      const sorted = [...(Array.isArray(r.hours) ? r.hours : [])].sort(
-        (a, b) => hourToNumber(a) - hourToNumber(b),
-      );
+    const start = hourToNumber(sorted[0]);
+    const end = hourToNumber(sorted[sorted.length - 1]) + 30;
 
-      const start = sorted[0];
-      const end = sorted[sorted.length - 1];
+    const current = hourToNumber(hour);
 
-      if (!start || !end) continue;
-
-      const hNum = hourToNumber(hour);
-      const startNum = hourToNumber(start);
-      const endNum = hourToNumber(end);
-
-      if (hNum > startNum && hNum < endNum) return true;
-
-      if (start && hour === start) startCount++;
-      if (end && hour === end) endCount++;
-    }
-
-    if (hour === "00:00" || hour === "06:00") {
-      if (startCount > 0 || endCount > 0) return true;
-    }
-
-    if (startCount > 0 && endCount > 0) return true;
-
-    return false;
-  };
+    // 🔥 bloqueia apenas se estiver DENTRO do intervalo
+    return current > start && current < end;
+  });
+};
 
   const toggleHour = (h) => {
     if (isPastHour(h) || isBooked(h)) return;
