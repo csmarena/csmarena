@@ -443,28 +443,21 @@ const isPastHour = (hour) => {
 };
 const isBooked = (hour) => {
   return reservations.some((r) => {
+    // 🔥 ignora a própria reserva temporária
+    if (r.id === booking.tempId) return false;
+
+    // 🔥 só considera reservas ativas OU pendentes
+    if (!["ativa", "pendente"].includes(r.status)) return false;
+
     if (r.date !== booking.date) return false;
 
-    // 🔥 bloqueia reservas ATIVAS
-    if (r.status === "ativa") {
-      return (r.hours || []).includes(hour);
-    }
+    const hours = Array.isArray(r.hours) ? r.hours : [];
+    if (hours.length === 0) return false;
 
-    // 🔥 bloqueia reservas PENDENTES (temporárias)
-    if (r.status === "pendente") {
-      if (!r.expiresAt) return false;
-
-      const aindaValida = Date.now() < r.expiresAt;
-
-      if (!aindaValida) return false;
-
-      return (r.hours || []).includes(hour);
-    }
-
-    return false;
+    return hours.includes(hour);
   });
 };
-
+  
 const toggleHour = (h) => {
   if (isPastHour(h) || isBooked(h)) return;
 
