@@ -2080,29 +2080,30 @@ setStep(4);
               })}
             </div>
 
-            <Button
-              text="Próximo"
-              onClick={() => {
-                if (!booking.date) return alert("Escolha uma data");
-                const hours = Array.isArray(booking.hours) ? booking.hours : [];
+<Button
+  text="Próximo"
+  onClick={async () => {
+    if (!booking.date) return alert("Escolha uma data");
 
-                if (hours.length === 0) return alert("Escolha um horário");
-const finalBooking = {
-  ...booking,
-};
+    const hours = Array.isArray(booking.hours) ? booking.hours : [];
+    if (hours.length === 0) return alert("Escolha um horário");
 
-try {
-  await updateDoc(doc(db, "reservas", booking.tempId), {
-    hours: Array.isArray(booking.hours) ? booking.hours : [],
-  });
-} catch (error) {
-  console.error("Erro ao salvar horários:", error);
-}
+    const finalBooking = {
+      ...booking,
+    };
 
-localStorage.setItem("booking_temp", JSON.stringify(finalBooking));
-                setStep(5);
-              }}
-            />
+    try {
+      await updateDoc(doc(db, "reservas", booking.tempId), {
+        hours: hours,
+      });
+    } catch (error) {
+      console.error("Erro ao salvar horários:", error);
+    }
+
+    localStorage.setItem("booking_temp", JSON.stringify(finalBooking));
+    setStep(5);
+  }}
+/>
           </>
         )}
 
