@@ -90,21 +90,28 @@ const isFinished = (r) => {
   const hours = Array.isArray(r.hours) ? r.hours : [];
   if (hours.length === 0) return false;
 
-  const lastHour = hours[hours.length - 1];
+  // 🔥 ordena corretamente
+  const sorted = [...hours].sort((a, b) => {
+    const [hA, mA] = a.split(":").map(Number);
+    const [hB, mB] = b.split(":").map(Number);
+    return hA !== hB ? hA - hB : mA - mB;
+  });
+
+  const lastHour = sorted[sorted.length - 1];
   if (!lastHour) return false;
 
   const [h, m] = lastHour.split(":").map(Number);
 
-  const data = new Date(r.date);
+  const fim = new Date(r.date);
 
-  if (h === 0) {
-    data.setDate(data.getDate() + 1);
-  }
+  if (h === 0) fim.setDate(fim.getDate() + 1);
 
-  data.setHours(h, m, 0, 0);
-  data.setMinutes(data.getMinutes() + 30);
+  fim.setHours(h, m, 0, 0);
+  fim.setMinutes(fim.getMinutes() + 30);
 
-return now > fim;
+  const now = new Date();
+
+  return now > fim;
 };
 
 const podeCancelar = (r) => {
