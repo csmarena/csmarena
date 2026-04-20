@@ -420,25 +420,19 @@ useEffect(() => {
   const hours = generateHours();
 
 const isPastHour = (hour) => {
-  if (!booking.date) return false;
+  if (!booking.date || !hour) return false;
+
+  // 🔥 pega só o início do intervalo (ex: "19:00-19:30")
+  const start = hour.split("-")[0];
+  const [h, m] = start.split(":").map(Number);
 
   const now = new Date();
 
+  // 🔥 data da reserva no fuso local
   const [year, month, day] = booking.date.split("-").map(Number);
-  const selectedDate = new Date(year, month - 1, day);
+  const bookingDateTime = new Date(year, month - 1, day, h, m, 0);
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  if (selectedDate > today) return false;
-  if (selectedDate < today) return true;
-
-  const [h, m] = hour.split(":").map(Number);
-
-  const slotTime = new Date();
-  slotTime.setHours(h, m, 0, 0);
-
-  return slotTime <= now;
+  return bookingDateTime <= now;
 };
 const isBooked = (hour) => {
   return reservations.some((r) => {
