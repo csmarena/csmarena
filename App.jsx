@@ -409,20 +409,19 @@ const isPastHour = (hour) => {
 
   const now = new Date();
 
-  // data selecionada (força formato correto sem fuso bugado)
-  const selectedDate = new Date(booking.date + "T00:00:00");
+  const [year, month, day] = booking.date.split("-").map(Number);
+  const selectedDate = new Date(year, month - 1, day);
 
-  // hoje sem horário
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  // 🔥 dia futuro → tudo liberado
+  // futuro
   if (selectedDate > today) return false;
 
-  // 🔥 dia passado → tudo bloqueado
+  // passado
   if (selectedDate < today) return true;
 
-  // 🔥 HOJE → compara horário
+  // hoje → compara horário
   const [h, m] = hour.split(":").map(Number);
 
   const slotTime = new Date();
