@@ -464,25 +464,57 @@ const isBooked = (hour) => {
   });
 };
 
-  const toggleHour = (h) => {
-    if (isPastHour(h) || isBooked(h)) return;
+const toggleHour = (h) => {
+  if (isPastHour(h) || isBooked(h)) return;
 
-    const current = Array.isArray(booking.hours) ? booking.hours : [];
+  const current = Array.isArray(booking.hours) ? booking.hours : [];
 
-    if (current.includes(h)) {
-      setBooking({
-        ...booking,
-        hours: current.filter((x) => x !== h),
-      });
-    } else {
-      setBooking({
-        ...booking,
-        hours: [...current, h].sort(
-          (a, b) => hourToNumber(a) - hourToNumber(b),
-        ),
-      });
-    }
-  };
+  // 🔥 se já está selecionado → remove normal
+  if (current.includes(h)) {
+    setBooking({
+      ...booking,
+      hours: current.filter((x) => x !== h),
+    });
+    return;
+  }
+
+  // 🔥 se não tem nenhum ainda → adiciona
+  if (current.length === 0) {
+    setBooking({
+      ...booking,
+      hours: [h],
+    });
+    return;
+  }
+
+  // 🔥 pega extremos
+  const sorted = [...current].sort(
+    (a, b) => hourToNumber(a) - hourToNumber(b)
+  );
+
+  const first = sorted[0];
+  const last = sorted[sorted.length - 1];
+
+  const firstNum = hourToNumber(first);
+  const lastNum = hourToNumber(last);
+  const newNum = hourToNumber(h);
+
+  // 🔥 só permite colar no início ou no fim
+  const isNextToStart = newNum === firstNum - 0.5;
+  const isNextToEnd = newNum === lastNum + 0.5;
+
+  if (!isNextToStart && !isNextToEnd) {
+    alert("Selecione horários contínuos!");
+    return;
+  }
+
+  setBooking({
+    ...booking,
+    hours: [...current, h].sort(
+      (a, b) => hourToNumber(a) - hourToNumber(b)
+    ),
+  });
+};
 
 const calcDuration = (hours) => {
   if (!Array.isArray(hours)) return 0;
