@@ -1108,12 +1108,40 @@ await Promise.all(
                         // 🔥 4. REMOVE O CLIENTE DO FIREBASE
 const clientId = c.id || c.firestoreId;
 
-if (!clientId) {
-  console.error("Cliente sem ID válido:", c);
-  return;
+// 🔥 pega reservas desse cliente
+const toDelete = reservations.filter(
+  (r) => cleanPhone(r.phone) === cleanPhone(c.phone)
+);
+
+// 🔥 deleta reservas
+await Promise.all(
+  toDelete.map(async (r) => {
+    const reservaId = r.id || r.firestoreId;
+    if (!reservaId) return;
+
+    return deleteDoc(doc(db, "reservas", reservaId));
+  })
+);
+
+// 🔥 deleta cliente SÓ se tiver ID
+if (clientId) {
+  await deleteDoc(doc(db, "clients", clientId));
+} else {
+  console.warn("Cliente sem ID - removendo só reservas");
 }
 
-await deleteDoc(doc(db, "clients", clientId));
+// 🔥 atualiza tela
+setReservations((prev) =>
+  prev.filter(
+    (r) => cleanPhone(r.phone) !== cleanPhone(c.phone)
+  )
+);
+
+setClients((prev) =>
+  prev.filter(
+    (cli) => cleanPhone(cli.phone) !== cleanPhone(c.phone)
+  )
+);
                         
                         // 🔥 5. ATUALIZA ESTADO LOCAL
                         setReservations((prev) =>
