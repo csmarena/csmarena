@@ -812,23 +812,18 @@ const calcPrice = (hours) => {
             .filter((r) => r.status !== "expirada")
            .map((r, i) => {
 
-  
+  const hours = Array.isArray(r.hours)
+    ? r.hours.filter(h => typeof h === "string" && h.includes("-"))
+    : [];
 
   if (hours.length === 0) return null;
 
-  // 🔥 ordena corretamente
-  const sorted = sortHours(hours);
-    const [hA, mA] = a.split(":").map(Number);
-    const [hB, mB] = b.split(":").map(Number);
-    return hA !== hB ? hA - hB : mA - mB;
-  });
+  const range = getTimeRange(hours);
 
-const range = getTimeRange(r.hours);
+  if (!range) return null;
 
-if (!range) return null;
-
-const { startPart, endPart } = range;
-
+  const { startPart, endPart } = range;
+             
 const [h1, m1] = startPart.split(":").map(Number);
 const [h2, m2] = endPart.split(":").map(Number);
 
@@ -904,15 +899,15 @@ const podeCancelar = diffHoras > 2;
                 </p>
                 <p>
                   <b>Horário:</b>{" "}
-                  {(Array.isArray(r.hours) ? r.hours : []).join(", ")}
+                  {hours.join(", ")}
                 </p>
                 <p>
                   <b>Duração:</b>{" "}
-                  {calcDuration(Array.isArray(r.hours) ? r.hours : [])}h
+                 {calcDuration(hours)}h
                 </p>
                 <p>
                   <b>Valor:</b>{" "}
-                  {calcPrice(Array.isArray(r.hours) ? r.hours : [])}
+                  {calcPrice(hours)}
                 </p>
                 <p>
   <b>Status:</b>{" "}
