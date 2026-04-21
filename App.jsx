@@ -1841,20 +1841,50 @@ const podeCancelar = diffHoras > 2;
   <b>Valor:</b> {calcPrice(r.hours)}
 </p>
 
- {r.status === "cancelada" ? (
+{r.status === "cancelada" ? (
   <p className="cancelada">Reserva cancelada</p>
 ) : isFinished ? (
   <p style={{ color: "green", fontWeight: "bold" }}>
     Jogo concluído
   </p>
-) : !podeCancelar ? (
-  <p className="cancel-info">
-    O horário do seu jogo está próximo. VEM PRA ARENA!
-  </p>
-) : null}
-</div>
-);
-})}
+) : (
+  (() => {
+    const now = new Date();
+
+    const hours = Array.isArray(r.hours) ? r.hours : [];
+    if (hours.length === 0) return null;
+
+    const sorted = [...hours].sort((a, b) => {
+  const getStart = (h) => h.split("-")[0];
+  const toMin = (h) => {
+    const [hh, mm] = h.split(":").map(Number);
+    return hh * 60 + mm;
+  };
+
+  return toMin(getStart(a)) - toMin(getStart(b));
+});
+
+    const first = sorted[0];
+    const start = first.split("-")[0];
+
+    const [h, m] = start.split(":").map(Number);
+
+    const inicio = new Date(r.date + "T00:00:00");
+    inicio.setHours(h, m, 0, 0);
+
+    const diffHoras = (inicio - now) / (1000 * 60 * 60);
+
+    if (diffHoras <= 2 && diffHoras > 0) {
+      return (
+        <p className="cancel-info">
+          O horário do seu jogo está próximo. VEM PRA ARENA!
+        </p>
+      );
+    }
+
+    return null;
+  })()
+)}
 
 </div>
 );
