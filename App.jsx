@@ -2196,7 +2196,7 @@ setStep(4);
                 }
 
                 setPage("payment");
-                setPaymentTime(300);
+                setPaymentTime(500);
                 setConfirmEnabled(false);
               }}
             />
