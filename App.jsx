@@ -14,54 +14,6 @@ import { useState, useEffect } from "react";
 import "./App.css";
 import { db } from "./firebase";
 
-function getTimeRange(hours) {
-  if (!Array.isArray(hours)) return null;
-
-  const valid = hours.filter(
-    (h) => typeof h === "string" && h.includes("-")
-  );
-
-  if (valid.length === 0) return null;
-
-  const sorted = [...valid].sort((a, b) => {
-    const [aStart] = a.split("-");
-    const [bStart] = b.split("-");
-
-    const [hA, mA] = aStart.split(":").map(Number);
-    const [hB, mB] = bStart.split(":").map(Number);
-
-    return hA !== hB ? hA - hB : mA - mB;
-  });
-
-  const first = sorted[0];
-  const last = sorted[sorted.length - 1];
-
-  if (!first || !last) return null;
-
-  const startPart = first.split("-")[0];
-  const endPart = last.split("-")[1];
-
-  if (!startPart || !endPart) return null;
-
-  return { startPart, endPart };
-}
-
-function sortHours(hours) {
-  if (!Array.isArray(hours)) return [];
-
-  return [...hours]
-    .filter(h => typeof h === "string" && h.includes("-"))
-    .sort((a, b) => {
-      const [aStart] = a.split("-");
-      const [bStart] = b.split("-");
-
-      const [hA, mA] = aStart.split(":").map(Number);
-      const [hB, mB] = bStart.split(":").map(Number);
-
-      return hA !== hB ? hA - hB : mA - mB;
-    });
-}
-
 const cleanPhone = (phone) => {
   if (!phone) return "";
   return String(phone).replace(/\D/g, "");
@@ -135,13 +87,15 @@ export default function App() {
 const [now, setNow] = useState(new Date());
   
 const isFinished = (r) => {
-  const hours = Array.isArray(r.hours)
-  ? r.hours.filter(h => typeof h === "string" && h.includes("-"))
-  : [];
+  const hours = Array.isArray(r.hours) ? r.hours : [];
   if (hours.length === 0) return false;
 
   // 🔥 ordena corretamente
-  const sorted = sortHours(hours);
+  const sorted = [...hours].sort((a, b) => {
+    const [hA, mA] = a.split(":").map(Number);
+    const [hB, mB] = b.split(":").map(Number);
+    return hA !== hB ? hA - hB : mA - mB;
+  });
 
   const lastHour = sorted[sorted.length - 1];
   if (!lastHour) return false;
@@ -161,9 +115,7 @@ const isFinished = (r) => {
 };
 
 const podeCancelar = (r) => {
-  const hours = Array.isArray(r.hours)
-  ? r.hours.filter(h => typeof h === "string" && h.includes("-"))
-  : [];
+  const hours = Array.isArray(r.hours) ? r.hours : [];
   if (hours.length === 0) return false;
 
   const firstHour = [...hours].sort()[0];
@@ -499,7 +451,7 @@ const isBooked = (hour) => {
 
     if (r.date !== booking.date) return false;
 
-    
+    const hours = Array.isArray(r.hours) ? r.hours : [];
     if (hours.length === 0) return false;
 
     return hours.includes(hour);
@@ -730,7 +682,7 @@ const calcPrice = (hours) => {
             text="📅 CALENDÁRIO"
             onClick={() => setAdminPage("calendar")}
           />
-          <Button text="📋 S" onClick={() => setAdminPage("list")} />
+          <Button text="📋 AGENDAMENTOS" onClick={() => setAdminPage("list")} />
           <Button text="👥 JOGADORES" onClick={() => setAdminPage("clients")} />
           <Button text="💰 PAGAMENTO" onClick={() => setAdminPage("payment")} />
         </div>
@@ -811,18 +763,24 @@ const calcPrice = (hours) => {
             .filter((r) => r.status !== "expirada")
            .map((r, i) => {
 
-  const hours = Array.isArray(r.hours)
-    ? r.hours.filter(h => typeof h === "string" && h.includes("-"))
-    : [];
+  const hours = Array.isArray(r.hours) ? r.hours : [];
 
   if (hours.length === 0) return null;
 
-  const range = getTimeRange(hours);
+  // 🔥 ordena corretamente
+  const sorted = [...hours].sort((a, b) => {
+    const [hA, mA] = a.split(":").map(Number);
+    const [hB, mB] = b.split(":").map(Number);
+    return hA !== hB ? hA - hB : mA - mB;
+  });
 
-  if (!range) return null;
+const firstHour = sorted[0];
+const lastHour = sorted[sorted.length - 1];
 
-  const { startPart, endPart } = range;
-             
+// 🔥 pega só o início do intervalo
+const startPart = firstHour.split("-")[0];
+const endPart = lastHour.split("-")[1];
+
 const [h1, m1] = startPart.split(":").map(Number);
 const [h2, m2] = endPart.split(":").map(Number);
 
@@ -898,15 +856,15 @@ const podeCancelar = diffHoras > 2;
                 </p>
                 <p>
                   <b>Horário:</b>{" "}
-                  {hours.join(", ")}
+                  {(Array.isArray(r.hours) ? r.hours : []).join(", ")}
                 </p>
                 <p>
                   <b>Duração:</b>{" "}
-                 {calcDuration(hours)}h
+                  {calcDuration(Array.isArray(r.hours) ? r.hours : [])}h
                 </p>
                 <p>
                   <b>Valor:</b>{" "}
-                  {calcPrice(hours)}
+                  {calcPrice(Array.isArray(r.hours) ? r.hours : [])}
                 </p>
                 <p>
   <b>Status:</b>{" "}
@@ -1449,7 +1407,7 @@ const podeCancelar = diffHoras > 2;
         {deletedReservations.length === 0 && <p>Nenhum item excluído</p>}
 
         {deletedReservations.map((r, i) => {
-  
+  const hours = Array.isArray(r.hours) ? r.hours : [];
 
   return (
     <div key={i} className="card">
@@ -1824,86 +1782,130 @@ const podeCancelar = diffHoras > 2;
           }}
         />
 
-<p style={{ marginTop: "30px", fontWeight: "bold" }}>
-  SEUS JOGOS AGENDADOS
+        <p style={{ marginTop: "30px", fontWeight: "bold" }}>
+              SEUS JOGOS AGENDADOS
+            </p>
+
+        {sortedReservations
+          .filter(
+  (r) =>
+    r.status === "ativa" &&
+    cleanPhone(r.phone) === cleanPhone(user.phone),
+)
+          .map((r, i) => {
+            const hours = Array.isArray(r.hours) ? r.hours : [];
+
+if (hours.length === 0) return null;
+
+// 🔥 ordenação correta
+const sorted = [...hours].sort((a, b) => {
+  const [hA, mA] = a.split(":").map(Number);
+  const [hB, mB] = b.split(":").map(Number);
+  return hA !== hB ? hA - hB : mA - mB;
+});
+
+const firstHour = sorted[0];
+const lastHour = sorted[sorted.length - 1];
+
+const [h1, m1] = firstHour.split(":").map(Number);
+const [h2, m2] = lastHour.split(":").map(Number);
+
+// 🔥 cria data correta (evita bug de horário)
+const inicio = new Date(r.date + "T00:00:00");
+inicio.setHours(h1, m1, 0, 0);
+
+const fim = new Date(r.date + "T00:00:00");
+fim.setHours(h2, m2, 0, 0);
+fim.setMinutes(fim.getMinutes() + 30);
+
+// 🔥 agora sim correto
+const now = new Date();
+
+const isFinished = now > fim;
+
+const diffHoras = (inicio.getTime() - now.getTime()) / (1000 * 60 * 60);
+
+const podeCancelar = diffHoras > 2;
+
+            return (
+              <div key={i} className="card">
+  <p><b>Cliente:</b> {r.name}</p>
+  <p><b>Esporte:</b> {r.sport}</p>
+  <p><b>Data:</b> {formatDateBR(r.date)}</p>
+  <p>
+    <b>Horário:</b>{" "}
+    {(Array.isArray(r.hours) ? r.hours : []).join(", ")}
+  </p>
+  <p><b>Duração:</b> {calcDuration(r.hours)}h</p>
+  <p>
+  <b>Valor:</b> {calcPrice(r.hours)}
 </p>
 
-{sortedReservations
-  .filter(
-    (r) =>
-      r.status === "ativa" &&
-      cleanPhone(r.phone) === cleanPhone(user.phone)
-  )
-  .map((r, i) => {
-
-    const hours = Array.isArray(r.hours)
-      ? r.hours.filter(h => typeof h === "string" && h.includes("-"))
-      : [];
-
-    if (hours.length === 0) return null;
-
-    const sorted = sortHours(hours);
-
-    const firstHour = sorted[0];
-    const lastHour = sorted[sorted.length - 1];
-
-    if (!firstHour || !lastHour) return null;
-
-    const [h1, m1] = firstHour.split(":").map(Number);
-    const [h2, m2] = lastHour.split(":").map(Number);
-
-    const inicio = new Date(r.date + "T00:00:00");
-    inicio.setHours(h1, m1, 0, 0);
-
-    const fim = new Date(r.date + "T00:00:00");
-    fim.setHours(h2, m2, 0, 0);
-    fim.setMinutes(fim.getMinutes() + 30);
-
+{r.status === "cancelada" ? (
+  <p className="cancelada">Reserva cancelada</p>
+) : isFinished ? (
+  <p style={{ color: "green", fontWeight: "bold" }}>
+    Jogo concluído
+  </p>
+) : (
+  (() => {
     const now = new Date();
 
-    const isFinished = now > fim;
+    const hours = Array.isArray(r.hours) ? r.hours : [];
+    if (hours.length === 0) return null;
+
+    const sorted = [...hours].sort((a, b) => {
+  const getStart = (h) => h.split("-")[0];
+  const toMin = (h) => {
+    const [hh, mm] = h.split(":").map(Number);
+    return hh * 60 + mm;
+  };
+
+  return toMin(getStart(a)) - toMin(getStart(b));
+});
+
+    const first = sorted[0];
+    const start = first.split("-")[0];
+
+    const [h, m] = start.split(":").map(Number);
+
+    const inicio = new Date(r.date + "T00:00:00");
+    inicio.setHours(h, m, 0, 0);
+
     const diffHoras = (inicio - now) / (1000 * 60 * 60);
 
-    return (
-      <div key={i} className="card">
-
-        <p><b>Cliente:</b> {r.name}</p>
-        <p><b>Esporte:</b> {r.sport}</p>
-        <p><b>Data:</b> {formatDateBR(r.date)}</p>
-
-        <p>
-          <b>Horário:</b> {hours.join(", ")}
+    if (diffHoras <= 2 && diffHoras > 0) {
+      return (
+        <p className="cancel-info">
+          O horário do seu jogo está próximo. VEM PRA ARENA!
         </p>
+      );
+    }
 
-        <p><b>Duração:</b> {calcDuration(hours)}h</p>
-        <p><b>Valor:</b> {calcPrice(hours)}</p>
+    return null;
+  })()
+)}
 
-        {r.status === "cancelada" ? (
-          <p className="cancelada">Reserva cancelada</p>
-        ) : isFinished ? (
-          <p style={{ color: "green", fontWeight: "bold" }}>
-            Jogo concluído
-          </p>
-        ) : (
-          diffHoras <= 2 && diffHoras > 0 && (
-            <p className="cancel-info">
-              O horário do seu jogo está próximo. VEM PRA ARENA!
-            </p>
-          )
-        )}
+</div>
+);
+} // 🔥 FECHA O BLOCO ANTERIOR
 
- </div>
-    );
-  })}
+if (page === "booking") {
+    return (
+      <div
+  className="container"
+  style={{
+    width: "100%",
+    maxWidth: "500px",
+    margin: "0 auto",
+    padding: "10px",
+    overflow: "hidden",
+  }}
+>
+        <Back />
 
-
-
-
-
-        
-
-      {step === 1 && (
-        <>
+        {step === 1 && (
+          <>
             <h2 className="titulo">JÁ POSSUI CADASTRO?</h2>
             <Button text="SIM" onClick={() => setStep(2)} />
             <Button text="NÃO" onClick={() => setPage("cadastro")} />
@@ -2237,7 +2239,7 @@ setStep(4);
   } // ✅ FECHA O if (page === "booking")
 
   // 🔥 AGORA SIM pode começar outro if
- if (page === "payment") {
+  if (page === "payment") {
 
   const savedTempId = localStorage.getItem("tempId");
 
@@ -2245,66 +2247,58 @@ setStep(4);
     (r) => r.id === (booking.tempId || savedTempId)
   );
 
-  // 🔥 CORRETO (não pode ser return null direto aqui)
-  if (!reservaAtual) {
-    return (
-      <div className="container">
-        <p>Carregando reserva...</p>
-      </div>
-    );
-  }
+ if (!reservaAtual) return null;
 
   const createdAt = reservaAtual.createdAt || Date.now();
 
   const secondsPassed = Math.floor((Date.now() - createdAt) / 1000);
 
+  // 🔓 libera após 45 segundos
   const isAdminUser =
-    cleanPhone(user.phone) === cleanPhone(ADMIN.phone);
+  cleanPhone(user.phone) === cleanPhone(ADMIN.phone);
 
-  const canConfirm = isAdminUser || secondsPassed >= 45;
+const canConfirm = isAdminUser || secondsPassed >= 45;
 
+  // ⏱ tempo restante REAL (firebase)
   const remainingMs = reservaAtual.expiresAt - Date.now();
   const remaining = Math.max(0, Math.floor(remainingMs / 1000));
 
   const minutes = Math.floor(remaining / 60);
   const seconds = remaining % 60;
 
-  const sorted = [
-    ...(Array.isArray(booking.hours) ? booking.hours : []),
-  ].sort((a, b) => hourToNumber(a) - hourToNumber(b));
+const sorted = [
+  ...(Array.isArray(booking.hours) ? booking.hours : []),
+].sort((a, b) => hourToNumber(a) - hourToNumber(b));
 
-  if (!sorted.length) {
+if (!sorted.length) return null;
+
+const startHour = hourToNumber(sorted[0]);
+const endHour = hourToNumber(sorted[sorted.length - 1]);
+
+const duration = calcDuration(booking.hours || []);
+
+let paymentValue = "R$ 5,00";
+
+// 🌙 NOITE
+if (startHour >= 18 * 60) {
+  paymentValue = "R$ 10,00";
+}
+// 🌞 DAYUSE acima de 2h
+else if (duration > 2) {
+  paymentValue = "R$ 10,00";
+}
+
     return (
-      <div className="container">
-        <p>Sem horários selecionados</p>
-      </div>
-    );
-  }
-
-  const startHour = hourToNumber(sorted[0]);
-  const endHour = hourToNumber(sorted[sorted.length - 1]);
-
-  const duration = calcDuration(booking.hours || []);
-
-  let paymentValue = "R$ 5,00";
-
-  if (startHour >= 18 * 60) {
-    paymentValue = "R$ 10,00";
-  } else if (duration > 2) {
-    paymentValue = "R$ 10,00";
-  }
-
-  return (
-    <div
-      className="container"
-      style={{
-        width: "100%",
-        maxWidth: "500px",
-        margin: "0 auto",
-        padding: "10px",
-        overflow: "hidden",
-      }}
-    >
+      <div
+  className="container"
+  style={{
+    width: "100%",
+    maxWidth: "500px",
+    margin: "0 auto",
+    padding: "10px",
+    overflow: "hidden",
+  }}
+>
         <button
           className="back"
           onClick={() => {
