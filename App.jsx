@@ -1837,6 +1837,35 @@ const podeCancelar = diffHoras > 2;
       r.status === "ativa" &&
       cleanPhone(r.phone) === cleanPhone(user.phone)
   )
+  .sort((a, b) => {
+    const getFim = (r) => {
+      const hours = Array.isArray(r.hours) ? r.hours : [];
+      if (hours.length === 0) return 0;
+
+      const sorted = sortHours(hours);
+      const lastHour = sorted[sorted.length - 1];
+      if (!lastHour) return 0;
+
+      const [h, m] = lastHour.split(":").map(Number);
+
+      const fim = new Date(r.date + "T00:00:00");
+      fim.setHours(h, m, 0, 0);
+      fim.setMinutes(fim.getMinutes() + 30);
+
+      return fim.getTime();
+    };
+
+    const now = Date.now();
+
+    const aFinished = getFim(a) < now;
+    const bFinished = getFim(b) < now;
+
+    // finalizados vão pro final
+    if (aFinished && !bFinished) return 1;
+    if (!aFinished && bFinished) return -1;
+
+    return 0;
+  })
   .map((r, i) => {
 
     const hours = Array.isArray(r.hours)
@@ -1868,7 +1897,14 @@ const podeCancelar = diffHoras > 2;
     const diffHoras = (inicio - now) / (1000 * 60 * 60);
 
     return (
-      <div key={i} className="card">
+      <div
+  key={i}
+  className="card"
+  style={{
+    background: isFinished ? "#f0f0f0" : "",
+    opacity: isFinished ? 0.7 : 1,
+  }}
+>
 
         <p><b>Cliente:</b> {r.name}</p>
         <p><b>Esporte:</b> {r.sport}</p>
