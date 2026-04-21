@@ -1786,124 +1786,78 @@ const podeCancelar = diffHoras > 2;
               SEUS JOGOS AGENDADOS
             </p>
 
-        {sortedReservations
-          .filter(
-  (r) =>
-    r.status === "ativa" &&
-    cleanPhone(r.phone) === cleanPhone(user.phone),
-)
-          .map((r, i) => {
-            const hours = Array.isArray(r.hours) ? r.hours : [];
+{sortedReservations
+  .filter(
+    (r) =>
+      r.status === "ativa" &&
+      cleanPhone(r.phone) === cleanPhone(user.phone)
+  )
+  .map((r, i) => {
 
-if (hours.length === 0) return null;
+    const hours = Array.isArray(r.hours)
+      ? r.hours.filter(h => typeof h === "string" && h.includes("-"))
+      : [];
 
-// 🔥 ordenação correta
-const sorted = [...hours].sort((a, b) => {
-  const [hA, mA] = a.split(":").map(Number);
-  const [hB, mB] = b.split(":").map(Number);
-  return hA !== hB ? hA - hB : mA - mB;
-});
-
-const firstHour = sorted[0];
-const lastHour = sorted[sorted.length - 1];
-
-const [h1, m1] = firstHour.split(":").map(Number);
-const [h2, m2] = lastHour.split(":").map(Number);
-
-// 🔥 cria data correta (evita bug de horário)
-const inicio = new Date(r.date + "T00:00:00");
-inicio.setHours(h1, m1, 0, 0);
-
-const fim = new Date(r.date + "T00:00:00");
-fim.setHours(h2, m2, 0, 0);
-fim.setMinutes(fim.getMinutes() + 30);
-
-// 🔥 agora sim correto
-const now = new Date();
-
-const isFinished = now > fim;
-
-const diffHoras = (inicio.getTime() - now.getTime()) / (1000 * 60 * 60);
-
-const podeCancelar = diffHoras > 2;
-
-            return (
-              <div key={i} className="card">
-  <p><b>Cliente:</b> {r.name}</p>
-  <p><b>Esporte:</b> {r.sport}</p>
-  <p><b>Data:</b> {formatDateBR(r.date)}</p>
-  <p>
-    <b>Horário:</b>{" "}
-    {(Array.isArray(r.hours) ? r.hours : []).join(", ")}
-  </p>
-  <p><b>Duração:</b> {calcDuration(r.hours)}h</p>
-  <p>
-  <b>Valor:</b> {calcPrice(r.hours)}
-</p>
-
-{r.status === "cancelada" ? (
-  <p className="cancelada">Reserva cancelada</p>
-) : isFinished ? (
-  <p style={{ color: "green", fontWeight: "bold" }}>
-    Jogo concluído
-  </p>
-) : (
-  (() => {
-    const now = new Date();
-
-    const hours = Array.isArray(r.hours) ? r.hours : [];
     if (hours.length === 0) return null;
 
-    const sorted = [...hours].sort((a, b) => {
-  const getStart = (h) => h.split("-")[0];
-  const toMin = (h) => {
-    const [hh, mm] = h.split(":").map(Number);
-    return hh * 60 + mm;
-  };
+    const sorted = sortHours(hours);
 
-  return toMin(getStart(a)) - toMin(getStart(b));
-});
+    const firstHour = sorted[0];
+    const lastHour = sorted[sorted.length - 1];
 
-    const first = sorted[0];
-    const start = first.split("-")[0];
+    if (!firstHour || !lastHour) return null;
 
-    const [h, m] = start.split(":").map(Number);
+    const [h1, m1] = firstHour.split(":").map(Number);
+    const [h2, m2] = lastHour.split(":").map(Number);
 
     const inicio = new Date(r.date + "T00:00:00");
-    inicio.setHours(h, m, 0, 0);
+    inicio.setHours(h1, m1, 0, 0);
 
+    const fim = new Date(r.date + "T00:00:00");
+    fim.setHours(h2, m2, 0, 0);
+    fim.setMinutes(fim.getMinutes() + 30);
+
+    const now = new Date();
+
+    const isFinished = now > fim;
     const diffHoras = (inicio - now) / (1000 * 60 * 60);
 
-    if (diffHoras <= 2 && diffHoras > 0) {
-      return (
-        <p className="cancel-info">
-          O horário do seu jogo está próximo. VEM PRA ARENA!
-        </p>
-      );
-    }
-
-    return null;
-  })()
-)}
-
-</div>
-);
-} // 🔥 FECHA O BLOCO ANTERIOR
-
-if (page === "booking") {
     return (
-      <div
-  className="container"
-  style={{
-    width: "100%",
-    maxWidth: "500px",
-    margin: "0 auto",
-    padding: "10px",
-    overflow: "hidden",
-  }}
->
-        <Back />
+      <div key={i} className="card">
+        <p><b>Cliente:</b> {r.name}</p>
+        <p><b>Esporte:</b> {r.sport}</p>
+        <p><b>Data:</b> {formatDateBR(r.date)}</p>
 
+        <p>
+          <b>Horário:</b> {hours.join(", ")}
+        </p>
+
+        <p><b>Duração:</b> {calcDuration(hours)}h</p>
+        <p><b>Valor:</b> {calcPrice(hours)}</p>
+
+        {r.status === "cancelada" ? (
+          <p className="cancelada">Reserva cancelada</p>
+        ) : isFinished ? (
+          <p style={{ color: "green", fontWeight: "bold" }}>
+            Jogo concluído
+          </p>
+        ) : (
+          diffHoras <= 2 && diffHoras > 0 && (
+            <p className="cancel-info">
+              O horário do seu jogo está próximo. VEM PRA ARENA!
+            </p>
+          )
+        )}
+      </div>
+    );
+  })}   {/* ✅ FECHAMENTO CORRETO DO MAP */}
+
+
+
+
+
+
+        
         {step === 1 && (
           <>
             <h2 className="titulo">JÁ POSSUI CADASTRO?</h2>
