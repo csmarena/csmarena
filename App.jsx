@@ -828,22 +828,24 @@ const calcPrice = (hours) => {
 const [h1, m1] = startPart.split(":").map(Number);
 const [h2, m2] = endPart.split(":").map(Number);
 
-  // 🔥 início
-  const inicio = new Date(r.date);
-  if (h1 === 0) inicio.setDate(inicio.getDate() + 1);
-  inicio.setHours(h1, m1, 0, 0);
+// ✅ CORREÇÃO AQUI
+const [year, month, day] = r.date.split("-").map(Number);
 
-  // 🔥 fim
-  const fim = new Date(r.date);
-  if (h2 === 0) fim.setDate(fim.getDate() + 1);
-  fim.setHours(h2, m2, 0, 0);
-  fim.setMinutes(fim.getMinutes() + 30);
+// 🔥 início
+const inicio = new Date(year, month - 1, day);
+if (h1 === 0) inicio.setDate(inicio.getDate() + 1);
+inicio.setHours(h1, m1, 0, 0);
 
-  // 🔥 cálculos corretos
-const now = new Date(); // 🔥 sempre atualizado
+// 🔥 fim
+const fim = new Date(year, month - 1, day);
+if (h2 === 0) fim.setDate(fim.getDate() + 1);
+fim.setHours(h2, m2, 0, 0);
+fim.setMinutes(fim.getMinutes() + 30);
+
+// 🔥 cálculos
+const now = new Date();
 const isFinished = now > fim;
 const diffHoras = (inicio.getTime() - now.getTime()) / (1000 * 60 * 60);
-const podeCancelar = diffHoras > 2;
 
   return (
     <div key={i} className="card" style={{ position: "relative" }}>
