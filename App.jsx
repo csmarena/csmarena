@@ -1074,7 +1074,7 @@ opacity: (isFinished || r.status === "cancelada") ? 0.8 : 1,
                         // 🔥 1. SALVA O CLIENTE NA LIXEIRA
                         await addDoc(collection(db, "lixeira"), {
                           ...c,
-                          firestoreId: c.id,
+                         firestoreId: c.id || null,
                           type: "cliente",
                           deletedAt: Date.now(),
                         });
@@ -1084,7 +1084,7 @@ opacity: (isFinished || r.status === "cancelada") ? 0.8 : 1,
                           toDelete.map((r) =>
                             addDoc(collection(db, "lixeira"), {
                               ...r,
-                              firestoreId: r.id,
+                              firestoreId: r.id || null,
                               type: "reserva",
                               deletedAt: Date.now(),
                             }),
