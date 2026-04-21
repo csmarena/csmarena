@@ -1872,31 +1872,34 @@ const podeCancelar = diffHoras > 2;
       ? r.hours.filter(h => typeof h === "string" && h.includes("-"))
       : [];
 
-    if (hours.length === 0) return null;
+if (hours.length === 0) return null;
 
-    const sorted = sortHours(hours);
+const sorted = sortHours(hours);
 
-    const firstHour = sorted[0];
-    const lastHour = sorted[sorted.length - 1];
+const firstHour = sorted[0];
+const lastHour = sorted[sorted.length - 1];
 
-    if (!firstHour || !lastHour) return null;
+if (!firstHour || !lastHour) return null;
 
-    const [h1, m1] = firstHour.split(":").map(Number);
-    const [h2, m2] = lastHour.split(":").map(Number);
+const [h1, m1] = firstHour.split(":").map(Number);
+const [h2, m2] = lastHour.split(":").map(Number);
 
-    const inicio = new Date(r.date + "T00:00:00");
-    inicio.setHours(h1, m1, 0, 0);
+// ✅ CORREÇÃO AQUI
+const [year, month, day] = r.date.split("-").map(Number);
 
-    const fim = new Date(r.date + "T00:00:00");
-    fim.setHours(h2, m2, 0, 0);
-    fim.setMinutes(fim.getMinutes() + 30);
+const inicio = new Date(year, month - 1, day);
+inicio.setHours(h1, m1, 0, 0);
 
-    const now = new Date();
+const fim = new Date(year, month - 1, day);
+fim.setHours(h2, m2, 0, 0);
+fim.setMinutes(fim.getMinutes() + 30);
 
-    const isFinished = now > fim;
-    const diffHoras = (inicio - now) / (1000 * 60 * 60);
+const now = new Date();
 
-    return (
+const isFinished = now > fim;
+const diffHoras = (inicio - now) / (1000 * 60 * 60);
+
+return (
       <div
   key={i}
   className="card"
