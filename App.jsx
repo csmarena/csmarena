@@ -1824,102 +1824,77 @@ const podeCancelar = diffHoras > 2;
           }}
         />
 
-        <p style={{ marginTop: "30px", fontWeight: "bold" }}>
-              SEUS JOGOS AGENDADOS
-            </p>
-
-        {sortedReservations
-          .filter(
-  (r) =>
-    r.status === "ativa" &&
-    cleanPhone(r.phone) === cleanPhone(user.phone),
-)
-          .map((r, i) => {
-            
-
-if (hours.length === 0) return null;
-
-// 🔥 ordenação correta
-const sorted = sortHours(hours);
-
-const firstHour = sorted[0];
-const lastHour = sorted[sorted.length - 1];
-
-const [h1, m1] = firstHour.split(":").map(Number);
-const [h2, m2] = lastHour.split(":").map(Number);
-
-// 🔥 cria data correta (evita bug de horário)
-const inicio = new Date(r.date + "T00:00:00");
-inicio.setHours(h1, m1, 0, 0);
-
-const fim = new Date(r.date + "T00:00:00");
-fim.setHours(h2, m2, 0, 0);
-fim.setMinutes(fim.getMinutes() + 30);
-
-// 🔥 agora sim correto
-const now = new Date();
-
-const isFinished = now > fim;
-
-const diffHoras = (inicio.getTime() - now.getTime()) / (1000 * 60 * 60);
-
-const podeCancelar = diffHoras > 2;
-
-            return (
-              <div key={i} className="card">
-  <p><b>Cliente:</b> {r.name}</p>
-  <p><b>Esporte:</b> {r.sport}</p>
-  <p><b>Data:</b> {formatDateBR(r.date)}</p>
-  <p>
-    <b>Horário:</b>{" "}
-    {(Array.isArray(r.hours) ? r.hours : []).join(", ")}
-  </p>
-  <p><b>Duração:</b> {calcDuration(r.hours)}h</p>
-  <p>
-  <b>Valor:</b> {calcPrice(r.hours)}
+<p style={{ marginTop: "30px", fontWeight: "bold" }}>
+  SEUS JOGOS AGENDADOS
 </p>
 
-{r.status === "cancelada" ? (
-  <p className="cancelada">Reserva cancelada</p>
-) : isFinished ? (
-  <p style={{ color: "green", fontWeight: "bold" }}>
-    Jogo concluído
-  </p>
-) : (
-{(() => {
-  const hours = Array.isArray(r.hours)
-    ? r.hours.filter(h => typeof h === "string" && h.includes("-"))
-    : [];
+{sortedReservations
+  .filter(
+    (r) =>
+      r.status === "ativa" &&
+      cleanPhone(r.phone) === cleanPhone(user.phone)
+  )
+  .map((r, i) => {
 
-  if (hours.length === 0) return null;
+    const hours = Array.isArray(r.hours)
+      ? r.hours.filter(h => typeof h === "string" && h.includes("-"))
+      : [];
 
-  const sorted = sortHours(hours);
+    if (hours.length === 0) return null;
 
-  const first = sorted[0];
-  const start = first.split("-")[0];
+    const sorted = sortHours(hours);
 
-  const [h, m] = start.split(":").map(Number);
+    const firstHour = sorted[0];
+    const lastHour = sorted[sorted.length - 1];
 
-  const now = new Date();
-  const inicio = new Date(r.date + "T00:00:00");
-  inicio.setHours(h, m, 0, 0);
+    if (!firstHour || !lastHour) return null;
 
-  const diffHoras = (inicio - now) / (1000 * 60 * 60);
+    const [h1, m1] = firstHour.split(":").map(Number);
+    const [h2, m2] = lastHour.split(":").map(Number);
 
-  if (diffHoras <= 2 && diffHoras > 0) {
+    const inicio = new Date(r.date + "T00:00:00");
+    inicio.setHours(h1, m1, 0, 0);
+
+    const fim = new Date(r.date + "T00:00:00");
+    fim.setHours(h2, m2, 0, 0);
+    fim.setMinutes(fim.getMinutes() + 30);
+
+    const now = new Date();
+    const isFinished = now > fim;
+    const diffHoras = (inicio - now) / (1000 * 60 * 60);
+    const podeCancelar = diffHoras > 2;
+
     return (
-      <p className="cancel-info">
-        O horário do seu jogo está próximo. VEM PRA ARENA!
-      </p>
+      <div key={i} className="card">
+
+        <p><b>Cliente:</b> {r.name}</p>
+        <p><b>Esporte:</b> {r.sport}</p>
+        <p><b>Data:</b> {formatDateBR(r.date)}</p>
+
+        <p>
+          <b>Horário:</b> {hours.join(", ")}
+        </p>
+
+        <p><b>Duração:</b> {calcDuration(hours)}h</p>
+        <p><b>Valor:</b> {calcPrice(hours)}</p>
+
+        {r.status === "cancelada" ? (
+          <p className="cancelada">Reserva cancelada</p>
+        ) : isFinished ? (
+          <p style={{ color: "green", fontWeight: "bold" }}>
+            Jogo concluído
+          </p>
+        ) : null}
+
+        {!isFinished && diffHoras <= 2 && diffHoras > 0 && (
+          <p className="cancel-info">
+            O horário do seu jogo está próximo. VEM PRA ARENA!
+          </p>
+        )}
+
+      </div>
     );
-  }
-
-  return null;
-})()}
-
-</div>
-);
-} // 🔥 FECHA O BLOCO ANTERIOR
+  })}
 
 if (page === "booking") {
     return (
