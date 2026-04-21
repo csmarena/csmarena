@@ -1886,45 +1886,36 @@ const podeCancelar = diffHoras > 2;
     Jogo concluído
   </p>
 ) : (
-  (() => {
-    const now = new Date();
+{(() => {
+  const hours = Array.isArray(r.hours)
+    ? r.hours.filter(h => typeof h === "string" && h.includes("-"))
+    : [];
 
-    const hours = Array.isArray(r.hours)
-  ? r.hours.filter(h => typeof h === "string" && h.includes("-"))
-  : [];
-    if (hours.length === 0) return null;
+  if (hours.length === 0) return null;
 
-    const sorted = sortHours(hours);
-  const getStart = (h) => h.split("-")[0];
-  const toMin = (h) => {
-    const [hh, mm] = h.split(":").map(Number);
-    return hh * 60 + mm;
-  };
+  const sorted = sortHours(hours);
 
-  return toMin(getStart(a)) - toMin(getStart(b));
-});
+  const first = sorted[0];
+  const start = first.split("-")[0];
 
-    const first = sorted[0];
-    const start = first.split("-")[0];
+  const [h, m] = start.split(":").map(Number);
 
-    const [h, m] = start.split(":").map(Number);
+  const now = new Date();
+  const inicio = new Date(r.date + "T00:00:00");
+  inicio.setHours(h, m, 0, 0);
 
-    const inicio = new Date(r.date + "T00:00:00");
-    inicio.setHours(h, m, 0, 0);
+  const diffHoras = (inicio - now) / (1000 * 60 * 60);
 
-    const diffHoras = (inicio - now) / (1000 * 60 * 60);
+  if (diffHoras <= 2 && diffHoras > 0) {
+    return (
+      <p className="cancel-info">
+        O horário do seu jogo está próximo. VEM PRA ARENA!
+      </p>
+    );
+  }
 
-    if (diffHoras <= 2 && diffHoras > 0) {
-      return (
-        <p className="cancel-info">
-          O horário do seu jogo está próximo. VEM PRA ARENA!
-        </p>
-      );
-    }
-
-    return null;
-  })()
-)}
+  return null;
+})()}
 
 </div>
 );
