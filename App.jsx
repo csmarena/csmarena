@@ -1142,17 +1142,6 @@ setClients((prev) =>
     (cli) => cleanPhone(cli.phone) !== cleanPhone(c.phone)
   )
 );
-                        
-                        // 🔥 5. ATUALIZA ESTADO LOCAL
-                        setReservations((prev) =>
-                          prev.filter(
-                            (r) => cleanPhone(r.phone) !== cleanPhone(c.phone),
-                          ),
-                        );
-
-                        setClients((prev) =>
-                          prev.filter((cli) => cleanPhone(cli.phone) !== cleanPhone(c.phone)),
-                        );
                       } catch (error) {
                         console.error("Erro ao excluir cliente:", error);
                       }
