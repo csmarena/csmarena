@@ -820,13 +820,13 @@ const calcPrice = (hours) => {
 
     const now = Date.now();
 
-    const aFinished = now > getFim(a);
-    const bFinished = now > getFim(b);
+const aDone = (now > getFim(a)) || a.status === "cancelada";
+const bDone = (now > getFim(b)) || b.status === "cancelada";
 
     // 👇 regra principal
-    if (aFinished !== bFinished) {
-      return aFinished ? 1 : -1; // concluídos vão pro final
-    }
+if (aDone !== bDone) {
+  return aDone ? 1 : -1;
+}
 
     // 👇 opcional: ordena por data/hora
     return getFim(a) - getFim(b);
@@ -879,7 +879,8 @@ const diffHoras = (inicio.getTime() - now.getTime()) / (1000 * 60 * 60);
   className="card"
   style={{
     position: "relative",
-    background: isFinished ? "#d3d3d3" : "", // cinza médio
+background: (isFinished || r.status === "cancelada") ? "#d3d3d3" : "",
+opacity: (isFinished || r.status === "cancelada") ? 0.8 : 1,
     opacity: isFinished ? 0.8 : 1,
   }}
 >
