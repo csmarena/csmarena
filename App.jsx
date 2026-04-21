@@ -1109,7 +1109,7 @@ opacity: (isFinished || r.status === "cancelada") ? 0.8 : 1,
                         );
 
                         setClients((prev) =>
-                          prev.filter((cli) => cli.phone !== c.phone),
+                          prev.filter((cli) => cleanPhone(cli.phone) !== cleanPhone(c.phone)),
                         );
                       } catch (error) {
                         console.error("Erro ao excluir cliente:", error);
