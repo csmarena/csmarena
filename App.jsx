@@ -1073,78 +1073,66 @@ await Promise.all(
                     if (
                       window.confirm("Excluir cliente e TODAS as reservas?")
                     ) {
-                      try {
-                        const toDelete = reservations.filter(
-                          (r) => cleanPhone(r.phone) === cleanPhone(c.phone),
-                        );
+try {
+  const toDelete = reservations.filter(
+    (r) => cleanPhone(r.phone) === cleanPhone(c.phone)
+  );
 
-                        // 🔥 1. SALVA O CLIENTE NA LIXEIRA
-                        await addDoc(collection(db, "lixeira"), {
-                          ...c,
-                         firestoreId: c.id || null,
-                          type: "cliente",
-                          deletedAt: Date.now(),
-                        });
+  const clientId = c.id || c.firestoreId;
 
-                        // 🔥 2. SALVA AS RESERVAS NA LIXEIRA (SE EXISTIREM)
-                        await Promise.all(
-                          toDelete.map((r) =>
-                            addDoc(collection(db, "lixeira"), {
-                              ...r,
-                              firestoreId: r.id || null,
-                              type: "reserva",
-                              deletedAt: Date.now(),
-                            }),
-                          ),
-                        );
+  // 🔥 1. salva cliente na lixeira
+  await addDoc(collection(db, "lixeira"), {
+    ...c,
+    firestoreId: clientId || null,
+    type: "cliente",
+    deletedAt: Date.now(),
+  });
 
-                        // 🔥 3. REMOVE AS RESERVAS DO FIREBASE
-                        await Promise.all(
-                          toDelete.map((r) =>
-                            deleteDoc(doc(db, "reservas", r.id)),
-                          ),
-                        );
+  // 🔥 2. salva reservas na lixeira
+  await Promise.all(
+    toDelete.map((r) =>
+      addDoc(collection(db, "lixeira"), {
+        ...r,
+        firestoreId: r.id || r.firestoreId || null,
+        type: "reserva",
+        deletedAt: Date.now(),
+      })
+    )
+  );
 
-                        // 🔥 4. REMOVE O CLIENTE DO FIREBASE
-const clientId = c.id || c.firestoreId;
+  // 🔥 3. deleta reservas do Firebase
+  await Promise.all(
+    toDelete.map((r) => {
+      const reservaId = r.id || r.firestoreId;
+      if (!reservaId) return;
 
-// 🔥 pega reservas desse cliente
-const toDelete = reservations.filter(
-  (r) => cleanPhone(r.phone) === cleanPhone(c.phone)
-);
+      return deleteDoc(doc(db, "reservas", reservaId));
+    })
+  );
 
-// 🔥 deleta reservas
-await Promise.all(
-  toDelete.map(async (r) => {
-    const reservaId = r.id || r.firestoreId;
-    if (!reservaId) return;
+  // 🔥 4. deleta cliente (se existir ID)
+  if (clientId) {
+    await deleteDoc(doc(db, "clients", clientId));
+  } else {
+    console.warn("Cliente sem ID - removido só da tela");
+  }
 
-    return deleteDoc(doc(db, "reservas", reservaId));
-  })
-);
+  // 🔥 5. atualiza tela
+  setReservations((prev) =>
+    prev.filter(
+      (r) => cleanPhone(r.phone) !== cleanPhone(c.phone)
+    )
+  );
 
-// 🔥 deleta cliente SÓ se tiver ID
-if (clientId) {
-  await deleteDoc(doc(db, "clients", clientId));
-} else {
-  console.warn("Cliente sem ID - removendo só reservas");
+  setClients((prev) =>
+    prev.filter(
+      (cli) => cleanPhone(cli.phone) !== cleanPhone(c.phone)
+    )
+  );
+
+} catch (error) {
+  console.error("Erro ao excluir cliente:", error);
 }
-
-// 🔥 atualiza tela
-setReservations((prev) =>
-  prev.filter(
-    (r) => cleanPhone(r.phone) !== cleanPhone(c.phone)
-  )
-);
-
-setClients((prev) =>
-  prev.filter(
-    (cli) => cleanPhone(cli.phone) !== cleanPhone(c.phone)
-  )
-);
-                      } catch (error) {
-                        console.error("Erro ao excluir cliente:", error);
-                      }
                     }
                   }}
                   style={{
