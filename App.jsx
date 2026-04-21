@@ -1890,7 +1890,7 @@ const [h1, m1] = startFirst.split(":").map(Number);
 const [, endLast] = lastHour.split("-");
 const [h2, m2] = endLast.split(":").map(Number);
 
-// data correta
+// ✅ CORREÇÃO DE DATA (igual ao admin)
 const [year, month, day] = r.date.split("-").map(Number);
 
 const inicio = new Date(year, month - 1, day);
@@ -1898,11 +1898,11 @@ inicio.setHours(h1, m1, 0, 0);
 
 const fim = new Date(year, month - 1, day);
 fim.setHours(h2, m2, 0, 0);
+fim.setMinutes(fim.getMinutes() + 30);
 
 const now = new Date();
 
 const isFinished = now > fim;
-const diffHoras = (inicio - now) / (1000 * 60 * 60);
 
 return (
       <div
