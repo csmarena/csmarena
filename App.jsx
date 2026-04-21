@@ -1907,11 +1907,7 @@ return (
 {r.status === "cancelada" ? (
   <p className="cancelada">Reserva cancelada</p>
 ) : r.status === "ativa" ? (
-  isFinished ? (
-    <p style={{ color: "green", fontWeight: "bold" }}>
-      Jogo concluído
-    </p>
-  ) : (
+isFinished ? null : (
     diffHoras <= 2 && diffHoras > 0 && (
       <p className="cancel-info">
         O horário do seu jogo está próximo. VEM PRA ARENA!
