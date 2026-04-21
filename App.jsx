@@ -1897,21 +1897,21 @@ const podeCancelar = diffHoras > 2;
   })}
 
 if (page === "booking") {
-    return (
-      <div
-  className="container"
-  style={{
-    width: "100%",
-    maxWidth: "500px",
-    margin: "0 auto",
-    padding: "10px",
-    overflow: "hidden",
-  }}
->
-        <Back />
+  return (
+    <div
+      className="container"
+      style={{
+        width: "100%",
+        maxWidth: "500px",
+        margin: "0 auto",
+        padding: "10px",
+        overflow: "hidden",
+      }}
+    >
+      <Back />
 
-        {step === 1 && (
-          <>
+      {step === 1 && (
+        <>
             <h2 className="titulo">JÁ POSSUI CADASTRO?</h2>
             <Button text="SIM" onClick={() => setStep(2)} />
             <Button text="NÃO" onClick={() => setPage("cadastro")} />
