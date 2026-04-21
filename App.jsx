@@ -1862,7 +1862,19 @@ const diffHoras = (inicio.getTime() - now.getTime()) / (1000 * 60 * 60);
   }}
 />
 
-
+<div
+  className="card"
+  style={{ marginTop: "20px", background: "#fff3cd" }}
+>
+  <h3>⚠️ AVISO IMPORTANTE</h3>
+  <p>
+    <b>Tolerância de atraso:</b> 15 minutos
+  </p>
+  <p>
+    <b>Prazo p/cancelar:</b> Até 2h antes da reserva
+  </p>
+</div>
+        
 <p style={{ marginTop: "30px", fontWeight: "bold" }}>
   SEUS JOGOS AGENDADOS
 </p>
