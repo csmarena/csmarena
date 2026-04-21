@@ -491,15 +491,17 @@ const isPastHour = (hour) => {
 };
 const isBooked = (hour) => {
   return reservations.some((r) => {
-    // 🔥 ignora a própria reserva temporária
+    // ignora a própria reserva temporária
     if (r.id === booking.tempId) return false;
 
-    // 🔥 só considera reservas ativas OU pendentes
+    // só considera reservas válidas
     if (!["ativa", "pendente"].includes(r.status)) return false;
 
+    // filtra pela data correta
     if (r.date !== booking.date) return false;
 
-    
+    const hours = Array.isArray(r.hours) ? r.hours : [];
+
     if (hours.length === 0) return false;
 
     return hours.includes(hour);
