@@ -1717,78 +1717,6 @@ const podeCancelar = diffHoras > 2;
             />
           )}
 
-<p style={{ marginTop: "30px", fontWeight: "bold" }}>
-  SEUS JOGOS AGENDADOS
-</p>
-
-{sortedReservations
-  .filter(
-    (r) =>
-      r.status === "ativa" &&
-      cleanPhone(r.phone) === cleanPhone(user.phone)
-  )
-  .map((r, i) => {
-
-    const hours = Array.isArray(r.hours)
-      ? r.hours.filter(h => typeof h === "string" && h.includes("-"))
-      : [];
-
-    if (hours.length === 0) return null;
-
-    const sorted = sortHours(hours);
-
-    const firstHour = sorted[0];
-    const lastHour = sorted[sorted.length - 1];
-
-    if (!firstHour || !lastHour) return null;
-
-    const [h1, m1] = firstHour.split(":").map(Number);
-    const [h2, m2] = lastHour.split(":").map(Number);
-
-    const inicio = new Date(r.date + "T00:00:00");
-    inicio.setHours(h1, m1, 0, 0);
-
-    const fim = new Date(r.date + "T00:00:00");
-    fim.setHours(h2, m2, 0, 0);
-    fim.setMinutes(fim.getMinutes() + 30);
-
-    const now = new Date();
-
-    const isFinished = now > fim;
-    const diffHoras = (inicio - now) / (1000 * 60 * 60);
-
-    return (
-      <div key={i} className="card">
-
-        <p><b>Cliente:</b> {r.name}</p>
-        <p><b>Esporte:</b> {r.sport}</p>
-        <p><b>Data:</b> {formatDateBR(r.date)}</p>
-
-        <p>
-          <b>Horário:</b> {hours.join(", ")}
-        </p>
-
-        <p><b>Duração:</b> {calcDuration(hours)}h</p>
-        <p><b>Valor:</b> {calcPrice(hours)}</p>
-
-        {r.status === "cancelada" ? (
-          <p className="cancelada">Reserva cancelada</p>
-        ) : isFinished ? (
-          <p style={{ color: "green", fontWeight: "bold" }}>
-            Jogo concluído
-          </p>
-        ) : (
-          diffHoras <= 2 && diffHoras > 0 && (
-            <p className="cancel-info">
-              O horário do seu jogo está próximo. VEM PRA ARENA!
-            </p>
-          )
-        )}
-
- </div>
-    );
-  })}
-
           
         </div>
         <div
@@ -1896,6 +1824,80 @@ const podeCancelar = diffHoras > 2;
   }}
 />
 
+
+<p style={{ marginTop: "30px", fontWeight: "bold" }}>
+  SEUS JOGOS AGENDADOS
+</p>
+
+{sortedReservations
+  .filter(
+    (r) =>
+      r.status === "ativa" &&
+      cleanPhone(r.phone) === cleanPhone(user.phone)
+  )
+  .map((r, i) => {
+
+    const hours = Array.isArray(r.hours)
+      ? r.hours.filter(h => typeof h === "string" && h.includes("-"))
+      : [];
+
+    if (hours.length === 0) return null;
+
+    const sorted = sortHours(hours);
+
+    const firstHour = sorted[0];
+    const lastHour = sorted[sorted.length - 1];
+
+    if (!firstHour || !lastHour) return null;
+
+    const [h1, m1] = firstHour.split(":").map(Number);
+    const [h2, m2] = lastHour.split(":").map(Number);
+
+    const inicio = new Date(r.date + "T00:00:00");
+    inicio.setHours(h1, m1, 0, 0);
+
+    const fim = new Date(r.date + "T00:00:00");
+    fim.setHours(h2, m2, 0, 0);
+    fim.setMinutes(fim.getMinutes() + 30);
+
+    const now = new Date();
+
+    const isFinished = now > fim;
+    const diffHoras = (inicio - now) / (1000 * 60 * 60);
+
+    return (
+      <div key={i} className="card">
+
+        <p><b>Cliente:</b> {r.name}</p>
+        <p><b>Esporte:</b> {r.sport}</p>
+        <p><b>Data:</b> {formatDateBR(r.date)}</p>
+
+        <p>
+          <b>Horário:</b> {hours.join(", ")}
+        </p>
+
+        <p><b>Duração:</b> {calcDuration(hours)}h</p>
+        <p><b>Valor:</b> {calcPrice(hours)}</p>
+
+        {r.status === "cancelada" ? (
+          <p className="cancelada">Reserva cancelada</p>
+        ) : isFinished ? (
+          <p style={{ color: "green", fontWeight: "bold" }}>
+            Jogo concluído
+          </p>
+        ) : (
+          diffHoras <= 2 && diffHoras > 0 && (
+            <p className="cancel-info">
+              O horário do seu jogo está próximo. VEM PRA ARENA!
+            </p>
+          )
+        )}
+
+ </div>
+    );
+  })}
+        
+        
 </div>
 );
 } // ✅ FECHA O CADASTRO COMPLETAMENTE AQUI
