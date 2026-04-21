@@ -919,7 +919,7 @@ const diffHoras = (inicio.getTime() - now.getTime()) / (1000 * 60 * 60);
 </span>
 </p>
 
-{!isFinished && r.status !== "cancelada" && podeCancelar && (
+{!isFinished && r.status !== "cancelada" && (
   <Button
     text="Cancelar"
     type="secondary"
