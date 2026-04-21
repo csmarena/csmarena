@@ -792,9 +792,10 @@ const calcPrice = (hours) => {
   fim.setMinutes(fim.getMinutes() + 30);
 
   // 🔥 cálculos corretos
-  const isFinished = now > fim;
-  const diffHoras = (inicio - now) / (1000 * 60 * 60);
-  const podeCancelar = diffHoras > 2;
+const now = new Date(); // 🔥 sempre atualizado
+const isFinished = now > fim;
+const diffHoras = (inicio.getTime() - now.getTime()) / (1000 * 60 * 60);
+const podeCancelar = diffHoras > 2;
 
   return (
     <div key={i} className="card" style={{ position: "relative" }}>
@@ -1838,41 +1839,21 @@ const podeCancelar = diffHoras > 2;
   <b>Valor:</b> {calcPrice(r.hours)}
 </p>
 
-  {r.status === "cancelada" ? (
-    <p className="cancelada">Reserva cancelada</p>
-  ) : isFinished ? (
-    <p style={{ color: "green", fontWeight: "bold" }}>
-      Jogo concluído
-    </p>
-  ) : podeCancelar ? (
-    <Button
-      text="Cancelar"
-      type="secondary"
-      onClick={async () => {
-        if (window.confirm("Tem certeza que deseja cancelar?")) {
-          try {
-            await updateDoc(doc(db, "reservas", r.id), {
-              status: "cancelada",
-            });
-          } catch (error) {
-            console.error("Erro ao cancelar:", error);
-          }
-        }
-      }}
-    />
-  ) : (
-    <p className="cancel-info">
-      O prazo para cancelar expirou. VEM PRA ARENA!
-    </p>
-  )}
+ {r.status === "cancelada" ? (
+  <p className="cancelada">Reserva cancelada</p>
+) : isFinished ? (
+  <p style={{ color: "green", fontWeight: "bold" }}>
+    Jogo concluído
+  </p>
+) : !podeCancelar ? (
+  <p className="cancel-info">
+    O horário do seu jogo está próximo. VEM PRA ARENA!
+  </p>
+) : null}
 </div>
-            );
-          })}   
-
-      </div>
-    );
-  }
-
+);
+})}
+        
   if (page === "booking") {
     return (
       <div
