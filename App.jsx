@@ -136,54 +136,35 @@ const [now, setNow] = useState(new Date());
   
 const isFinished = (r) => {
   const hours = Array.isArray(r.hours)
-  ? r.hours.filter(h => typeof h === "string" && h.includes("-"))
-  : [];
+    ? r.hours.filter(h => typeof h === "string" && h.includes("-"))
+    : [];
+
   if (hours.length === 0) return false;
 
-  // 🔥 ordena corretamente
   const sorted = sortHours(hours);
-
   const lastHour = sorted[sorted.length - 1];
   if (!lastHour) return false;
 
-  const [h, m] = lastHour.split(":").map(Number);
+  // pega o fim correto do intervalo
+  const [, end] = lastHour.split("-");
+  const [h, m] = end.split(":").map(Number);
 
-  const fim = new Date(r.date);
+  // data correta (sem bug de timezone)
+  const [year, month, day] = r.date.split("-").map(Number);
+
+  const fim = new Date(year, month - 1, day);
 
   if (h === 0) fim.setDate(fim.getDate() + 1);
 
   fim.setHours(h, m, 0, 0);
+
+  // ✅ IMPORTANTE: adiciona os 30 minutos do slot
   fim.setMinutes(fim.getMinutes() + 30);
 
   const now = new Date();
 
   return now > fim;
 };
-
-const podeCancelar = (r) => {
-  const hours = Array.isArray(r.hours)
-  ? r.hours.filter(h => typeof h === "string" && h.includes("-"))
-  : [];
-  if (hours.length === 0) return false;
-
-  const firstHour = [...hours].sort()[0];
-  if (!firstHour) return false;
-
-  const [h, m] = firstHour.split(":").map(Number);
-
-  const data = new Date(r.date);
-
-  if (h === 0) {
-    data.setDate(data.getDate() + 1);
-  }
-
-  data.setHours(h, m, 0, 0);
-
-const diffHoras = (data - now) / (1000 * 60 * 60);
-
-return diffHoras > 2;
-};
-
   
   
   const [selectedClient, setSelectedClient] = useState(null);
