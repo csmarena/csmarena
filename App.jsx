@@ -774,11 +774,15 @@ const calcPrice = (hours) => {
     return hA !== hB ? hA - hB : mA - mB;
   });
 
-  const firstHour = sorted[0];
-  const lastHour = sorted[sorted.length - 1];
+const firstHour = sorted[0];
+const lastHour = sorted[sorted.length - 1];
 
-  const [h1, m1] = firstHour.split(":").map(Number);
-  const [h2, m2] = lastHour.split(":").map(Number);
+// 🔥 pega só o início do intervalo
+const startPart = firstHour.split("-")[0];
+const endPart = lastHour.split("-")[1];
+
+const [h1, m1] = startPart.split(":").map(Number);
+const [h2, m2] = endPart.split(":").map(Number);
 
   // 🔥 início
   const inicio = new Date(r.date);
@@ -2194,7 +2198,7 @@ setStep(4);
                 }
 
                 setPage("payment");
-                setPaymentTime(500);
+                setPaymentTime(300);
                 setConfirmEnabled(false);
               }}
             />
