@@ -1859,47 +1859,48 @@ const podeCancelar = diffHoras > 2;
               Use apenas estes dados nas reservas.
             </p>
         
-        <Button
-          text="Salvar"
-          onClick={async () => {
-            const newId = cleanPhone(tempUser.phone);
+<Button
+  text="Salvar"
+  onClick={async () => {
+    const newId = cleanPhone(tempUser.phone);
 
-            const updatedUser = {
-              ...tempUser,
-              id: newId,
-            };
+    const updatedUser = {
+      ...tempUser,
+      id: newId,
+    };
 
-            setUser(updatedUser);
+    setUser(updatedUser);
 
-            try {
-              // 🔥 atualiza APENAS o cliente (CORRETO)
-              await updateDoc(doc(db, "clients", user.id), {
+    try {
+      await updateDoc(doc(db, "clients", user.id), {
+        name: tempUser.name,
+        phone: cleanPhone(tempUser.phone),
+      });
+
+      setClients((prev) =>
+        prev.map((c) =>
+          c.id === user.id
+            ? {
+                ...c,
                 name: tempUser.name,
                 phone: cleanPhone(tempUser.phone),
-              });
+              }
+            : c,
+        ),
+      );
+    } catch (error) {
+      console.error("Erro ao atualizar:", error);
+    }
 
-              // 🔥 atualiza lista local de clientes
-              setClients((prev) =>
-                prev.map((c) =>
-                  c.id === user.id
-                    ? {
-                        ...c,
-                        name: tempUser.name,
-                        phone: cleanPhone(tempUser.phone),
-                      }
-                    : c,
-                ),
-              );
-            } catch (error) {
-              console.error("Erro ao atualizar:", error);
-            }
+    setPage("home");
+  }}
+/>
 
-            setPage("home");
-          }}
-        />
+</div>
+);
+} // ✅ FECHA O CADASTRO COMPLETAMENTE AQUI
 
-
-
+// 🔥 AQUI COMEÇA O NEXT BLOCO
 
 if (page === "booking") {
   return (
