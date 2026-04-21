@@ -2088,7 +2088,7 @@ const docRef = await addDoc(collection(db, "reservas"), {
   name: booking.client?.name,
   phone: cleanPhone(booking.client?.phone),
   status: "pendente",
-  expiresAt: Date.now() + 3 * 60 * 1000,
+  expiresAt: Date.now() + 5 * 60 * 1000,
   createdAt: Date.now(),
 });
 
