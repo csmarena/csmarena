@@ -1806,23 +1806,21 @@ const lastHour = sorted[sorted.length - 1];
 const [h1, m1] = firstHour.split(":").map(Number);
 const [h2, m2] = lastHour.split(":").map(Number);
 
-// 🔥 CORREÇÃO AQUI
-const [year, month, day] = r.date.split("-").map(Number);
-
-// 🔥 início (LOCAL, sem bug de UTC)
-const inicio = new Date(year, month - 1, day);
-if (h1 === 0) inicio.setDate(inicio.getDate() + 1);
+// 🔥 cria data correta (evita bug de horário)
+const inicio = new Date(r.date + "T00:00:00");
 inicio.setHours(h1, m1, 0, 0);
 
-// 🔥 fim (LOCAL, sem bug)
-const fim = new Date(year, month - 1, day);
-if (h2 === 0) fim.setDate(fim.getDate() + 1);
+const fim = new Date(r.date + "T00:00:00");
 fim.setHours(h2, m2, 0, 0);
 fim.setMinutes(fim.getMinutes() + 30);
 
-// 🔥 cálculos
+// 🔥 agora sim correto
+const now = new Date();
+
 const isFinished = now > fim;
-const diffHoras = (inicio - now) / (1000 * 60 * 60);
+
+const diffHoras = (inicio.getTime() - now.getTime()) / (1000 * 60 * 60);
+
 const podeCancelar = diffHoras > 2;
 
             return (
