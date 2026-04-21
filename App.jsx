@@ -900,8 +900,15 @@ opacity: (isFinished || r.status === "cancelada") ? 0.8 : 1,
                           deletedAt: Date.now(),
                         });
 
-                        await deleteDoc(doc(db, "reservas", r.id));
+await Promise.all(
+  toDelete.map(async (r) => {
+    const reservaId = r.id || r.firestoreId;
 
+    if (!reservaId) return;
+
+    return deleteDoc(doc(db, "reservas", reservaId));
+  })
+);
                         // 🔥 REMOVE IMEDIATO DA TELA
                         setReservations((prev) =>
                           prev.filter((item) => item.id !== r.id),
@@ -1099,8 +1106,15 @@ opacity: (isFinished || r.status === "cancelada") ? 0.8 : 1,
                         );
 
                         // 🔥 4. REMOVE O CLIENTE DO FIREBASE
-                        await deleteDoc(doc(db, "clients", c.id));
+const clientId = c.id || c.firestoreId;
 
+if (!clientId) {
+  console.error("Cliente sem ID válido:", c);
+  return;
+}
+
+await deleteDoc(doc(db, "clients", clientId));
+                        
                         // 🔥 5. ATUALIZA ESTADO LOCAL
                         setReservations((prev) =>
                           prev.filter(
