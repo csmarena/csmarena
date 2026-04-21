@@ -819,14 +819,20 @@ const calcPrice = (hours) => {
 
   if (hours.length === 0) return null;
 
-  const range = getTimeRange(hours);
+const sorted = sortHours(hours);
 
-  if (!range) return null;
+const firstHour = sorted[0];
+const lastHour = sorted[sorted.length - 1];
 
-  const { startPart, endPart } = range;
-             
-const [h1, m1] = startPart.split(":").map(Number);
-const [h2, m2] = endPart.split(":").map(Number);
+if (!firstHour || !lastHour) return null;
+
+// início
+const [startFirst] = firstHour.split("-");
+const [h1, m1] = startFirst.split(":").map(Number);
+
+// fim
+const [, endLast] = lastHour.split("-");
+const [h2, m2] = endLast.split(":").map(Number);
 
 // ✅ CORREÇÃO AQUI
 const [year, month, day] = r.date.split("-").map(Number);
