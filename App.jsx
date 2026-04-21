@@ -14,6 +14,51 @@ import { useState, useEffect } from "react";
 import "./App.css";
 import { db } from "./firebase";
 
+function getTimeRange(hours) {
+  if (!Array.isArray(hours)) return null;
+
+  const valid = hours.filter(
+    (h) => typeof h === "string" && h.includes("-")
+  );
+
+  if (valid.length === 0) return null;
+
+  const sorted = [...valid].sort((a, b) => {
+    const [aStart] = a.split("-");
+    const [bStart] = b.split("-");
+
+    const [hA, mA] = aStart.split(":").map(Number);
+    const [hB, mB] = bStart.split(":").map(Number);
+
+    return hA !== hB ? hA - hB : mA - mB;
+  });
+
+  const first = sorted[0];
+  const last = sorted[sorted.length - 1];
+
+  if (!first || !last) return null;
+
+  const startPart = first.split("-")[0];
+  const endPart = last.split("-")[1];
+
+  if (!startPart || !endPart) return null;
+
+  return { startPart, endPart };
+}
+
+function sortHours(hours) {
+  if (!Array.isArray(hours)) return [];
+
+  return [...hours]
+    .filter(h => typeof h === "string" && h.includes("-"))
+    .sort((a, b) => {
+      const [hA, mA] = a.split(":").map(Number);
+      const [hB, mB] = b.split(":").map(Number);
+      return hA !== hB ? hA - hB : mA - mB;
+    });
+}
+
+
 const cleanPhone = (phone) => {
   if (!phone) return "";
   return String(phone).replace(/\D/g, "");
@@ -87,11 +132,13 @@ export default function App() {
 const [now, setNow] = useState(new Date());
   
 const isFinished = (r) => {
-  const hours = Array.isArray(r.hours) ? r.hours : [];
+  const hours = Array.isArray(r.hours)
+  ? r.hours.filter(h => typeof h === "string" && h.includes("-"))
+  : [];
   if (hours.length === 0) return false;
 
   // 🔥 ordena corretamente
-  const sorted = [...hours].sort((a, b) => {
+  const sorted = sortHours(hours);
     const [hA, mA] = a.split(":").map(Number);
     const [hB, mB] = b.split(":").map(Number);
     return hA !== hB ? hA - hB : mA - mB;
@@ -115,7 +162,9 @@ const isFinished = (r) => {
 };
 
 const podeCancelar = (r) => {
-  const hours = Array.isArray(r.hours) ? r.hours : [];
+  const hours = Array.isArray(r.hours)
+  ? r.hours.filter(h => typeof h === "string" && h.includes("-"))
+  : [];
   if (hours.length === 0) return false;
 
   const firstHour = [...hours].sort()[0];
@@ -451,7 +500,7 @@ const isBooked = (hour) => {
 
     if (r.date !== booking.date) return false;
 
-    const hours = Array.isArray(r.hours) ? r.hours : [];
+    
     if (hours.length === 0) return false;
 
     return hours.includes(hour);
@@ -682,7 +731,7 @@ const calcPrice = (hours) => {
             text="📅 CALENDÁRIO"
             onClick={() => setAdminPage("calendar")}
           />
-          <Button text="📋 AGENDAMENTOS" onClick={() => setAdminPage("list")} />
+          <Button text="📋 S" onClick={() => setAdminPage("list")} />
           <Button text="👥 JOGADORES" onClick={() => setAdminPage("clients")} />
           <Button text="💰 PAGAMENTO" onClick={() => setAdminPage("payment")} />
         </div>
@@ -763,23 +812,22 @@ const calcPrice = (hours) => {
             .filter((r) => r.status !== "expirada")
            .map((r, i) => {
 
-  const hours = Array.isArray(r.hours) ? r.hours : [];
+  
 
   if (hours.length === 0) return null;
 
   // 🔥 ordena corretamente
-  const sorted = [...hours].sort((a, b) => {
+  const sorted = sortHours(hours);
     const [hA, mA] = a.split(":").map(Number);
     const [hB, mB] = b.split(":").map(Number);
     return hA !== hB ? hA - hB : mA - mB;
   });
 
-const firstHour = sorted[0];
-const lastHour = sorted[sorted.length - 1];
+const range = getTimeRange(r.hours);
 
-// 🔥 pega só o início do intervalo
-const startPart = firstHour.split("-")[0];
-const endPart = lastHour.split("-")[1];
+if (!range) return null;
+
+const { startPart, endPart } = range;
 
 const [h1, m1] = startPart.split(":").map(Number);
 const [h2, m2] = endPart.split(":").map(Number);
@@ -1407,7 +1455,7 @@ const podeCancelar = diffHoras > 2;
         {deletedReservations.length === 0 && <p>Nenhum item excluído</p>}
 
         {deletedReservations.map((r, i) => {
-  const hours = Array.isArray(r.hours) ? r.hours : [];
+  
 
   return (
     <div key={i} className="card">
@@ -1793,12 +1841,12 @@ const podeCancelar = diffHoras > 2;
     cleanPhone(r.phone) === cleanPhone(user.phone),
 )
           .map((r, i) => {
-            const hours = Array.isArray(r.hours) ? r.hours : [];
+            
 
 if (hours.length === 0) return null;
 
 // 🔥 ordenação correta
-const sorted = [...hours].sort((a, b) => {
+const sorted = sortHours(hours);
   const [hA, mA] = a.split(":").map(Number);
   const [hB, mB] = b.split(":").map(Number);
   return hA !== hB ? hA - hB : mA - mB;
@@ -1851,10 +1899,12 @@ const podeCancelar = diffHoras > 2;
   (() => {
     const now = new Date();
 
-    const hours = Array.isArray(r.hours) ? r.hours : [];
+    const hours = Array.isArray(r.hours)
+  ? r.hours.filter(h => typeof h === "string" && h.includes("-"))
+  : [];
     if (hours.length === 0) return null;
 
-    const sorted = [...hours].sort((a, b) => {
+    const sorted = sortHours(hours);
   const getStart = (h) => h.split("-")[0];
   const toMin = (h) => {
     const [hh, mm] = h.split(":").map(Number);
