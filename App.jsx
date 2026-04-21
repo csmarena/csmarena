@@ -729,10 +729,10 @@ const calcPrice = (hours) => {
           </button>
 
           <Button
-            text="📅 CALENDÁRIO"
+            text="📅 CALENDÁRIO DIÁRIO"
             onClick={() => setAdminPage("calendar")}
           />
-          <Button text="📋 S" onClick={() => setAdminPage("list")} />
+          <Button text="📋 AGENDAMENTOS" onClick={() => setAdminPage("list")} />
           <Button text="👥 JOGADORES" onClick={() => setAdminPage("clients")} />
           <Button text="💰 PAGAMENTO" onClick={() => setAdminPage("payment")} />
         </div>
