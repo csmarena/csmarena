@@ -52,12 +52,15 @@ function sortHours(hours) {
   return [...hours]
     .filter(h => typeof h === "string" && h.includes("-"))
     .sort((a, b) => {
-      const [hA, mA] = a.split(":").map(Number);
-      const [hB, mB] = b.split(":").map(Number);
+      const [aStart] = a.split("-");
+      const [bStart] = b.split("-");
+
+      const [hA, mA] = aStart.split(":").map(Number);
+      const [hB, mB] = bStart.split(":").map(Number);
+
       return hA !== hB ? hA - hB : mA - mB;
     });
 }
-
 
 const cleanPhone = (phone) => {
   if (!phone) return "";
@@ -139,10 +142,6 @@ const isFinished = (r) => {
 
   // 🔥 ordena corretamente
   const sorted = sortHours(hours);
-    const [hA, mA] = a.split(":").map(Number);
-    const [hB, mB] = b.split(":").map(Number);
-    return hA !== hB ? hA - hB : mA - mB;
-  });
 
   const lastHour = sorted[sorted.length - 1];
   if (!lastHour) return false;
@@ -1842,10 +1841,6 @@ if (hours.length === 0) return null;
 
 // 🔥 ordenação correta
 const sorted = sortHours(hours);
-  const [hA, mA] = a.split(":").map(Number);
-  const [hB, mB] = b.split(":").map(Number);
-  return hA !== hB ? hA - hB : mA - mB;
-});
 
 const firstHour = sorted[0];
 const lastHour = sorted[sorted.length - 1];
