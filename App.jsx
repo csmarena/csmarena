@@ -1888,18 +1888,10 @@ fim.setHours(h2, m2, 0, 0);
 fim.setMinutes(fim.getMinutes() + 30);
 
 const now = new Date();
-
 const isFinished = now > fim;
 
 return (
-      <div
-  key={i}
-  className="card"
-  style={{
-    background: isFinished ? "#f0f0f0" : "",
-    opacity: isFinished ? 0.7 : 1,
-  }}
->
+<div key={i} className="card">
 
         <p><b>Cliente:</b> {r.name}</p>
         <p><b>Esporte:</b> {r.sport}</p>
