@@ -790,9 +790,48 @@ const calcPrice = (hours) => {
             }}
           />
           
-          {sortedReservations
-            .filter((r) => r.status !== "expirada")
-           .map((r, i) => {
+{sortedReservations
+  .filter((r) => r.status !== "expirada")
+  .sort((a, b) => {
+    const getFim = (r) => {
+      const hours = Array.isArray(r.hours)
+        ? r.hours.filter(h => typeof h === "string" && h.includes("-"))
+        : [];
+
+      if (hours.length === 0) return 0;
+
+      const sorted = sortHours(hours);
+      const lastHour = sorted[sorted.length - 1];
+      if (!lastHour) return 0;
+
+      const [, end] = lastHour.split("-");
+      const [h, m] = end.split(":").map(Number);
+
+      const [year, month, day] = r.date.split("-").map(Number);
+      const fim = new Date(year, month - 1, day);
+
+      if (h === 0) fim.setDate(fim.getDate() + 1);
+
+      fim.setHours(h, m, 0, 0);
+      fim.setMinutes(fim.getMinutes() + 30);
+
+      return fim.getTime();
+    };
+
+    const now = Date.now();
+
+    const aFinished = now > getFim(a);
+    const bFinished = now > getFim(b);
+
+    // 👇 regra principal
+    if (aFinished !== bFinished) {
+      return aFinished ? 1 : -1; // concluídos vão pro final
+    }
+
+    // 👇 opcional: ordena por data/hora
+    return getFim(a) - getFim(b);
+  })
+  .map((r, i) => {
 
   const hours = Array.isArray(r.hours)
     ? r.hours.filter(h => typeof h === "string" && h.includes("-"))
@@ -835,7 +874,15 @@ const isFinished = now > fim;
 const diffHoras = (inicio.getTime() - now.getTime()) / (1000 * 60 * 60);
 
   return (
-    <div key={i} className="card" style={{ position: "relative" }}>
+   <div
+  key={i}
+  className="card"
+  style={{
+    position: "relative",
+    background: isFinished ? "#d3d3d3" : "", // cinza médio
+    opacity: isFinished ? 0.8 : 1,
+  }}
+>
                 <button
                   onClick={async () => {
                     if (
