@@ -1881,10 +1881,14 @@ const lastHour = sorted[sorted.length - 1];
 
 if (!firstHour || !lastHour) return null;
 
-const [h1, m1] = firstHour.split(":").map(Number);
-const [h2, m2] = lastHour.split(":").map(Number);
-
 // ✅ CORREÇÃO AQUI
+const [startFirst] = firstHour.split("-");
+const [h1, m1] = startFirst.split(":").map(Number);
+
+const [, endLast] = lastHour.split("-");
+const [h2, m2] = endLast.split(":").map(Number);
+
+// data correta
 const [year, month, day] = r.date.split("-").map(Number);
 
 const inicio = new Date(year, month - 1, day);
@@ -1892,7 +1896,6 @@ inicio.setHours(h1, m1, 0, 0);
 
 const fim = new Date(year, month - 1, day);
 fim.setHours(h2, m2, 0, 0);
-fim.setMinutes(fim.getMinutes() + 30);
 
 const now = new Date();
 
