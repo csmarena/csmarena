@@ -1853,8 +1853,12 @@ const podeCancelar = diffHoras > 2;
 </div>
 );
 })}
-        
-  if (page === "booking") {
+
+</div>
+);
+} // 🔥 FECHA O BLOCO ANTERIOR
+
+if (page === "booking") {
     return (
       <div
   className="container"
