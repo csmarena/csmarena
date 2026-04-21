@@ -1866,7 +1866,6 @@ const podeCancelar = diffHoras > 2;
 
     return (
       <div key={i} className="card">
-
         <p><b>Cliente:</b> {r.name}</p>
         <p><b>Esporte:</b> {r.sport}</p>
         <p><b>Data:</b> {formatDateBR(r.date)}</p>
@@ -1891,23 +1890,9 @@ const podeCancelar = diffHoras > 2;
             </p>
           )
         )}
- </div>
+      </div>
     );
-  }
-        
-if (page === "booking") {
-  return (
-    <div
-      className="container"
-      style={{
-        width: "100%",
-        maxWidth: "500px",
-        margin: "0 auto",
-        padding: "10px",
-        overflow: "hidden",
-      }}
-    >
-      <Back />
+  })}   {/* ✅ FECHAMENTO CORRETO DO MAP */}
 
       {step === 1 && (
         <>
