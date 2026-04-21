@@ -1925,19 +1925,21 @@ return (
         <p><b>Duração:</b> {calcDuration(hours)}h</p>
         <p><b>Valor:</b> {calcPrice(hours)}</p>
 
-        {r.status === "cancelada" ? (
-          <p className="cancelada">Reserva cancelada</p>
-        ) : isFinished ? (
-          <p style={{ color: "green", fontWeight: "bold" }}>
-            Jogo concluído
-          </p>
-        ) : (
-          diffHoras <= 2 && diffHoras > 0 && (
-            <p className="cancel-info">
-              O horário do seu jogo está próximo. VEM PRA ARENA!
-            </p>
-          )
-        )}
+{r.status === "cancelada" ? (
+  <p className="cancelada">Reserva cancelada</p>
+) : r.status === "ativa" ? (
+  isFinished ? (
+    <p style={{ color: "green", fontWeight: "bold" }}>
+      Jogo concluído
+    </p>
+  ) : (
+    diffHoras <= 2 && diffHoras > 0 && (
+      <p className="cancel-info">
+        O horário do seu jogo está próximo. VEM PRA ARENA!
+      </p>
+    )
+  )
+) : null}
 
  </div>
     );
