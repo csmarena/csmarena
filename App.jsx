@@ -1893,9 +1893,7 @@ const podeCancelar = diffHoras > 2;
         )}
  </div>
     );
-  })}
-  
-// 👇 TEM QUE FECHAR O MAP AQUI
+  }),
         
 if (page === "booking") {
   return (
