@@ -1893,7 +1893,7 @@ const podeCancelar = diffHoras > 2;
         )}
  </div>
     );
-  }),
+  }
         
 if (page === "booking") {
   return (
