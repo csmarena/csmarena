@@ -1860,9 +1860,9 @@ const podeCancelar = diffHoras > 2;
     fim.setMinutes(fim.getMinutes() + 30);
 
     const now = new Date();
+
     const isFinished = now > fim;
     const diffHoras = (inicio - now) / (1000 * 60 * 60);
-    const podeCancelar = diffHoras > 2;
 
     return (
       <div key={i} className="card">
@@ -1884,18 +1884,19 @@ const podeCancelar = diffHoras > 2;
           <p style={{ color: "green", fontWeight: "bold" }}>
             Jogo concluído
           </p>
-        ) : null}
-
-        {!isFinished && diffHoras <= 2 && diffHoras > 0 && (
-          <p className="cancel-info">
-            O horário do seu jogo está próximo. VEM PRA ARENA!
-          </p>
+        ) : (
+          diffHoras <= 2 && diffHoras > 0 && (
+            <p className="cancel-info">
+              O horário do seu jogo está próximo. VEM PRA ARENA!
+            </p>
+          )
         )}
-
-      </div>
+ </div>
     );
   })}
-
+  
+// 👇 TEM QUE FECHAR O MAP AQUI
+        
 if (page === "booking") {
   return (
     <div
@@ -2245,7 +2246,7 @@ setStep(4);
   } // ✅ FECHA O if (page === "booking")
 
   // 🔥 AGORA SIM pode começar outro if
-  if (page === "payment") {
+ if (page === "payment") {
 
   const savedTempId = localStorage.getItem("tempId");
 
@@ -2253,58 +2254,66 @@ setStep(4);
     (r) => r.id === (booking.tempId || savedTempId)
   );
 
- if (!reservaAtual) return null;
+  // 🔥 CORRETO (não pode ser return null direto aqui)
+  if (!reservaAtual) {
+    return (
+      <div className="container">
+        <p>Carregando reserva...</p>
+      </div>
+    );
+  }
 
   const createdAt = reservaAtual.createdAt || Date.now();
 
   const secondsPassed = Math.floor((Date.now() - createdAt) / 1000);
 
-  // 🔓 libera após 45 segundos
   const isAdminUser =
-  cleanPhone(user.phone) === cleanPhone(ADMIN.phone);
+    cleanPhone(user.phone) === cleanPhone(ADMIN.phone);
 
-const canConfirm = isAdminUser || secondsPassed >= 45;
+  const canConfirm = isAdminUser || secondsPassed >= 45;
 
-  // ⏱ tempo restante REAL (firebase)
   const remainingMs = reservaAtual.expiresAt - Date.now();
   const remaining = Math.max(0, Math.floor(remainingMs / 1000));
 
   const minutes = Math.floor(remaining / 60);
   const seconds = remaining % 60;
 
-const sorted = [
-  ...(Array.isArray(booking.hours) ? booking.hours : []),
-].sort((a, b) => hourToNumber(a) - hourToNumber(b));
+  const sorted = [
+    ...(Array.isArray(booking.hours) ? booking.hours : []),
+  ].sort((a, b) => hourToNumber(a) - hourToNumber(b));
 
-if (!sorted.length) return null;
-
-const startHour = hourToNumber(sorted[0]);
-const endHour = hourToNumber(sorted[sorted.length - 1]);
-
-const duration = calcDuration(booking.hours || []);
-
-let paymentValue = "R$ 5,00";
-
-// 🌙 NOITE
-if (startHour >= 18 * 60) {
-  paymentValue = "R$ 10,00";
-}
-// 🌞 DAYUSE acima de 2h
-else if (duration > 2) {
-  paymentValue = "R$ 10,00";
-}
-
+  if (!sorted.length) {
     return (
-      <div
-  className="container"
-  style={{
-    width: "100%",
-    maxWidth: "500px",
-    margin: "0 auto",
-    padding: "10px",
-    overflow: "hidden",
-  }}
->
+      <div className="container">
+        <p>Sem horários selecionados</p>
+      </div>
+    );
+  }
+
+  const startHour = hourToNumber(sorted[0]);
+  const endHour = hourToNumber(sorted[sorted.length - 1]);
+
+  const duration = calcDuration(booking.hours || []);
+
+  let paymentValue = "R$ 5,00";
+
+  if (startHour >= 18 * 60) {
+    paymentValue = "R$ 10,00";
+  } else if (duration > 2) {
+    paymentValue = "R$ 10,00";
+  }
+
+  return (
+    <div
+      className="container"
+      style={{
+        width: "100%",
+        maxWidth: "500px",
+        margin: "0 auto",
+        padding: "10px",
+        overflow: "hidden",
+      }}
+    >
         <button
           className="back"
           onClick={() => {
